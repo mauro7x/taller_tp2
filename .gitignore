@@ -1,0 +1,21 @@
+# excluimos archivos sin extension
+*
+!/**/
+!*.*
+
+# directorios
+/.vscode
+
+# particulares
+*.o
+*.zip
+*.txt
+*.drawio
+
+# cpplint
+cpplint.py
+execute.sh
+filter_options
+
+
+
