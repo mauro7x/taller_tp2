@@ -30,8 +30,10 @@ class WorkersConfig {
 
     public:
         WorkersConfig(std::string filepath);
-        ~WorkersConfig();
-
+        WorkersConfig(const WorkersConfig&) = delete;
+        WorkersConfig& operator=(const WorkersConfig&) = delete;
+        
+        int getTotalWorkers();
         int getFarmers();
         int getLumberjacks();
         int getMiners();
@@ -39,8 +41,7 @@ class WorkersConfig {
         int getCarpenters();
         int getBlacksmiths();
 
-        WorkersConfig(const WorkersConfig&) = delete;
-        WorkersConfig& operator=(const WorkersConfig&) = delete;
+        ~WorkersConfig();
 };
 
 //-----------------------------------------------------------------------------

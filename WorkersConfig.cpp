@@ -12,15 +12,10 @@
 
 WorkersConfig::WorkersConfig(std::string filepath) {
     try {
-        this->parseFile(filepath);
+        parseFile(filepath);
     } catch(const Exception& e) {
         throw e;
     }
-}
-
-
-WorkersConfig::~WorkersConfig() {
-
 }
 
 
@@ -37,7 +32,7 @@ void WorkersConfig::parseFile(std::string filepath) {
     while (std::getline(config_file, worker_type, '=')) {
         std::getline(config_file, worker_n);
         try{
-            this->setWorkerQuantity(worker_type, worker_n);
+            setWorkerQuantity(worker_type, worker_n);
         } catch(const Exception& e) {
             config_file.close();
             throw e;
@@ -45,7 +40,7 @@ void WorkersConfig::parseFile(std::string filepath) {
     }
 
     config_file.close();
-    if (!this->areAllValuesSet()) {
+    if (!areAllValuesSet()) {
         throw(Exception(INPUT_ERROR, "Error: archivo incompleto. "
                         "Función: WorkersConfig::parseFile()"));
     }
@@ -54,17 +49,17 @@ void WorkersConfig::parseFile(std::string filepath) {
 
 void WorkersConfig::setWorkerQuantity(std::string worker,
                                       std::string quantity) {
-    if (!this->isValueValid(worker)) {
+    if (!isValueValid(worker)) {
         throw(Exception(INPUT_ERROR, "Error: input desconocido. "
                         "Función: WorkersConfig::setWorkerQuantity()"));
     }
 
-    if (this->isValueSet(worker)) {
+    if (isValueSet(worker)) {
         throw(Exception(INPUT_ERROR, "Error: trabajador repetido. "
                         "Función: WorkersConfig::setWorkerQuantity()"));
     }
 
-    this->workers[worker] = std::stoi(quantity);
+    workers[worker] = std::stoi(quantity);
 }
 
 
@@ -75,44 +70,55 @@ bool WorkersConfig::isValueValid(std::string value) const {
 
 
 bool WorkersConfig::isValueSet(std::string value) const {
-    return (this->workers.count(value) > 0);
+    return (workers.count(value) > 0);
 }
 
 
 bool WorkersConfig::areAllValuesSet() const {
-    return (this->isValueSet(FARMERS) && this->isValueSet(LUMBERJACKS) &&
-            this->isValueSet(MINERS) && this->isValueSet(COOKS) &&
-            this->isValueSet(CARPENTERS) && this->isValueSet(BLACKSMITHS));
+    return (isValueSet(FARMERS) && isValueSet(LUMBERJACKS) &&
+            isValueSet(MINERS) && isValueSet(COOKS) &&
+            isValueSet(CARPENTERS) && isValueSet(BLACKSMITHS));
+}
+
+
+int WorkersConfig::getTotalWorkers() {
+    return (workers[FARMERS] + workers[LUMBERJACKS] + workers[MINERS] +
+            workers[COOKS] + workers[CARPENTERS] + workers[BLACKSMITHS]);
 }
 
 
 int WorkersConfig::getFarmers() {
-    return this->workers[FARMERS];
+    return workers[FARMERS];
 }
 
 
 int WorkersConfig::getLumberjacks() {
-    return this->workers[LUMBERJACKS];
+    return workers[LUMBERJACKS];
 }
 
 
 int WorkersConfig::getMiners() {
-    return this->workers[MINERS];
+    return workers[MINERS];
 }
 
 
 int WorkersConfig::getCooks() {
-    return this->workers[COOKS];
+    return workers[COOKS];
 }
 
 
 int WorkersConfig::getCarpenters() {
-    return this->workers[CARPENTERS];
+    return workers[CARPENTERS];
 }
 
 
 int WorkersConfig::getBlacksmiths() {
-    return this->workers[BLACKSMITHS];
+    return workers[BLACKSMITHS];
+}
+
+
+WorkersConfig::~WorkersConfig() {
+
 }
 
 

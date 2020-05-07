@@ -9,12 +9,9 @@
 //-----------------------------------------------------------------------------
 #include <iostream>
 
-#include "Counter.h"
-#include "WorkersConfig.h"
+#include "Game.h"
 #include "Exception.h"
-
 //-----------------------------------------------------------------------------
-
 
 // ----------------------------------------------------------------------------
 
@@ -24,23 +21,17 @@ int main(int argc, char* argv[]) {
         return USAGE_ERROR;
     }
 
-    std::string workers_path = argv[1]; 
-    std::string map_path = argv[2];
+    std::string workers_filepath = argv[1];
+    std::string map_filepath = argv[1];
     
-    try {        
-        WorkersConfig workers_config(workers_path);
-        CounterProtected points(0);
-
-
-
-        
-
-
+    try {     
+        Game game(workers_filepath, map_filepath);   
+        game.run();
     } catch(const Exception& e) {
         std::cerr << e.what() << '\n';
         return e.getErrorCode();
     }
-    
+
     return 0;
 }
 

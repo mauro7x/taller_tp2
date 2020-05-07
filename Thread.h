@@ -13,10 +13,6 @@ class Thread {
 
     public:
         Thread();
-        void start();
-        void join();
-        virtual void run() = 0;
-        virtual ~Thread();
 
         /**
          * Deshabilitamos el constructor por copia
@@ -31,6 +27,12 @@ class Thread {
         */
         Thread(Thread&& other);
         Thread& operator=(Thread&& other);
+        
+        void start();
+        void join();
+        virtual void run() = 0;
+
+        virtual ~Thread();
 };
 
 //-----------------------------------------------------------------------------

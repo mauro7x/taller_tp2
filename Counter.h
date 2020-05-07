@@ -13,13 +13,13 @@ class CounterProtected {
         unsigned int value;
 
     public:
-        CounterProtected(unsigned int initial_value);
-        ~CounterProtected();
+        CounterProtected();
         CounterProtected(const CounterProtected&) = delete;
         CounterProtected& operator=(const CounterProtected&) = delete;
 
-        // Métodos (secciones críticas):
         void increment(unsigned int value);
+        
+        ~CounterProtected();
 };
 
 //-----------------------------------------------------------------------------

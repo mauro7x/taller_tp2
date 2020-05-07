@@ -13,14 +13,18 @@
 Exception::Exception(int error_code, std::string error_msg) :
                      error_code(error_code), error_msg(error_msg) {}
 
-Exception::~Exception() throw () {}
 
 int Exception::getErrorCode() const throw () {
-    return this->error_code;
+    return error_code;
 }
 
+
 const char* Exception::what() const throw () {
-    return this->error_msg.c_str();
+    return error_msg.c_str();
 }
+
+
+Exception::~Exception() throw () {}
+
 
 //-----------------------------------------------------------------------------
