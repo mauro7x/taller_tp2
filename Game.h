@@ -34,6 +34,15 @@ class Game {
         std::vector<Thread*> workers;
 
         // methods
+        void spawnWorkers();
+        void spawnGatherers(int n, BlockingQueue<int>& source);
+        // void spawnProducers(int n, ???);
+        void startWorkers();
+        void joinAndFreeWorkers();
+
+
+
+        void printResults();
 
     public:
         Game(std::string workers_path, std::string map_path);

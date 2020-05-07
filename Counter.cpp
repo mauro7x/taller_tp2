@@ -11,6 +11,12 @@ void CounterProtected::increment(unsigned int value) {
 }
 
 
+unsigned int CounterProtected::getValue() {
+    std::unique_lock<std::mutex> l(m);
+    return value;
+}
+
+
 CounterProtected::~CounterProtected() {}       
 
 

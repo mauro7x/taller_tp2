@@ -18,6 +18,7 @@ class CounterProtected {
         CounterProtected& operator=(const CounterProtected&) = delete;
 
         void increment(unsigned int value);
+        unsigned int getValue();
         
         ~CounterProtected();
 };

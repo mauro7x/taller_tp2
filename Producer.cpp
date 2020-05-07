@@ -1,24 +1,24 @@
-#include "Gatherer.h"
+#include "Producer.h"
 
 //-----------------------------------------------------------------------------
 #include <iostream>
 
 #include "Inventory.h"
-#include "BlockingQueue.h"
+#include "Counter.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-Gatherer::Gatherer(Inventory &inventory, BlockingQueue<int> &source) :
-                   inventory(inventory), source(source) {}
+Producer::Producer(Inventory &inventory, CounterProtected &points) :
+                   inventory(inventory), points(points) {}
 
 
-void Gatherer::run() {
-    std::cout << "Buenas. Aquí un gatherer.\n";
+void Producer::run() {
+    std::cout << "Buenas. Aquí un producer.\n";
 }
 
 
-Gatherer::~Gatherer() {
+Producer::~Producer() {
     
 }
 

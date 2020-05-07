@@ -1,24 +1,24 @@
-#ifndef __GATHERER_H__
-#define __GATHERER_H__
+#ifndef __PRODUCER_H__
+#define __PRODUCER_H__
 
 //-----------------------------------------------------------------------------
 #include "Thread.h"
 #include "Inventory.h"
-#include "BlockingQueue.h"
+#include "Counter.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Gatherer : public Thread {
+class Producer : public Thread {
     private:
         Inventory& inventory;
-        BlockingQueue<int>& source;
+        CounterProtected& points;
 
     public:
-        Gatherer(Inventory& inventory, BlockingQueue<int>& source);
+        Producer(Inventory& inventory, CounterProtected& source);
         virtual void run() override;
-        virtual ~Gatherer();
+        virtual ~Producer();
 };
 
 //-----------------------------------------------------------------------------
-#endif // __GATHERER_H__
+#endif // __PRODUCER_H__
