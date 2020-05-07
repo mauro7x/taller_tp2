@@ -14,7 +14,7 @@ Producer::Producer(Inventory &inventory, CounterProtected &points) :
 
 
 void Producer::run() {
-    std::cout << "Buenas. Aquí un producer.\n";
+    // do something
 }
 
 

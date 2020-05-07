@@ -14,7 +14,7 @@ Gatherer::Gatherer(Inventory &inventory, BlockingQueue<int> &source) :
 
 
 void Gatherer::run() {
-    std::cout << "Buenas. Aquí un gatherer.\n";
+    // do nofin
 }
 
 

@@ -12,7 +12,10 @@
 #include "BlockingQueue.h"
 #include "Inventory.h"
 #include "Counter.h"
+
+#include "resources.h"
 //-----------------------------------------------------------------------------
+
 
 //-----------------------------------------------------------------------------
 
@@ -24,24 +27,30 @@ class Game {
         
         // game static stuff
         Inventory inventory;
-        BlockingQueue<int> farmers_source;
-        BlockingQueue<int> lumberjacks_source;
-        BlockingQueue<int> miners_source;
+        BlockingQueue<Resource> farmers_source;
+        BlockingQueue<Resource> lumberjacks_source;
+        BlockingQueue<Resource> miners_source;
         CounterProtected points;
 
         // threads
-        int total_workers;
-        std::vector<Thread*> workers;
+        int total_gatherers;
+        std::vector<Thread*> gatherers;
+        int total_producers;
+        std::vector<Thread*> producers;
 
-        // methods
+        // thread methods
         void spawnWorkers();
-        void spawnGatherers(int n, BlockingQueue<int>& source);
-        // void spawnProducers(int n, ???);
-        void startWorkers();
-        void joinAndFreeWorkers();
+        void spawnGatherers(const int &n, BlockingQueue<Resource>& source);
+        void spawnProducers(const int &n); // INCOMPLETA
+        void startThreads(const int &n, std::vector<Thread*>& threads);
+        void joinThreads(const int &n, std::vector<Thread*>& threads);
+        void freeThreads(const int &n, std::vector<Thread*>& threads);
 
+        // resource methods
+        void distributeResources();
+        void closeQueues();
 
-
+        // general methods
         void printResults();
 
     public:

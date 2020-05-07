@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::string workers_filepath = argv[1];
-    std::string map_filepath = argv[1];
+    std::string map_filepath = argv[2];
     
     try {     
         Game game(workers_filepath, map_filepath);   

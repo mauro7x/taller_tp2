@@ -6,6 +6,7 @@
 # directorios
 /.vscode
 /testing
+/input
 
 # particulares
 *.o

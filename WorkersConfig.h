@@ -20,7 +20,7 @@
 
 class WorkersConfig {
     private:
-        std::unordered_map<std::string, int> workers;
+        std::unordered_map<std::string, int> quantities;
 
         void parseFile(std::string filepath);
         void setWorkerQuantity(std::string worker, std::string quantity);
@@ -33,7 +33,8 @@ class WorkersConfig {
         WorkersConfig(const WorkersConfig&) = delete;
         WorkersConfig& operator=(const WorkersConfig&) = delete;
         
-        int getTotalWorkers();
+        int getTotalGatherers();
+        int getTotalProducers();
         int getFarmers();
         int getLumberjacks();
         int getMiners();

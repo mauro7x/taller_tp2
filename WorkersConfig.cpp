@@ -1,7 +1,6 @@
 #include "WorkersConfig.h"
 
 //-----------------------------------------------------------------------------
-#include <iostream>
 #include <string>
 #include <fstream>
 
@@ -24,7 +23,7 @@ void WorkersConfig::parseFile(std::string filepath) {
     config_file.open(filepath);
     if (!config_file.is_open()) {
         throw(Exception(INPUT_ERROR, "Error: no se pudo abrir el archivo. "
-                        "Función: WorkersConfig::parseFile()"));
+                        "Función: WorkersConfig::parseFile()."));
     }
 
     std::string worker_type;
@@ -42,7 +41,7 @@ void WorkersConfig::parseFile(std::string filepath) {
     config_file.close();
     if (!areAllValuesSet()) {
         throw(Exception(INPUT_ERROR, "Error: archivo incompleto. "
-                        "Función: WorkersConfig::parseFile()"));
+                        "Función: WorkersConfig::parseFile()."));
     }
 }
 
@@ -51,7 +50,7 @@ void WorkersConfig::setWorkerQuantity(std::string worker,
                                       std::string quantity) {
     if (!isValueValid(worker)) {
         throw(Exception(INPUT_ERROR, "Error: input desconocido. "
-                        "Función: WorkersConfig::setWorkerQuantity()"));
+                        "Función: WorkersConfig::setWorkerQuantity()."));
     }
 
     if (isValueSet(worker)) {
@@ -59,7 +58,7 @@ void WorkersConfig::setWorkerQuantity(std::string worker,
                         "Función: WorkersConfig::setWorkerQuantity()"));
     }
 
-    workers[worker] = std::stoi(quantity);
+    quantities[worker] = std::stoi(quantity);
 }
 
 
@@ -70,7 +69,7 @@ bool WorkersConfig::isValueValid(std::string value) const {
 
 
 bool WorkersConfig::isValueSet(std::string value) const {
-    return (workers.count(value) > 0);
+    return (quantities.count(value) > 0);
 }
 
 
@@ -81,39 +80,43 @@ bool WorkersConfig::areAllValuesSet() const {
 }
 
 
-int WorkersConfig::getTotalWorkers() {
-    return (workers[FARMERS] + workers[LUMBERJACKS] + workers[MINERS] +
-            workers[COOKS] + workers[CARPENTERS] + workers[BLACKSMITHS]);
+int WorkersConfig::getTotalGatherers() {
+    return (quantities[FARMERS] + quantities[LUMBERJACKS] + quantities[MINERS]);
+}
+
+
+int WorkersConfig::getTotalProducers() {
+    return (quantities[COOKS] + quantities[CARPENTERS] + quantities[BLACKSMITHS]);
 }
 
 
 int WorkersConfig::getFarmers() {
-    return workers[FARMERS];
+    return quantities[FARMERS];
 }
 
 
 int WorkersConfig::getLumberjacks() {
-    return workers[LUMBERJACKS];
+    return quantities[LUMBERJACKS];
 }
 
 
 int WorkersConfig::getMiners() {
-    return workers[MINERS];
+    return quantities[MINERS];
 }
 
 
 int WorkersConfig::getCooks() {
-    return workers[COOKS];
+    return quantities[COOKS];
 }
 
 
 int WorkersConfig::getCarpenters() {
-    return workers[CARPENTERS];
+    return quantities[CARPENTERS];
 }
 
 
 int WorkersConfig::getBlacksmiths() {
-    return workers[BLACKSMITHS];
+    return quantities[BLACKSMITHS];
 }
 
 
