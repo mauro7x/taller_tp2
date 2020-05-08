@@ -40,7 +40,7 @@ class Game {
         void spawnWorkers();
         void spawnGatherers(const int &n, BlockingQueue<Resource>& source);
         void spawnProducers(const int &n, int profitForProducing,
-                            Recipe& recipe);
+                            const Recipe& recipe);
         void startThreads(const int &n, std::vector<Thread*>& threads);
         void joinThreads(const int &n, std::vector<Thread*>& threads);
         void freeThreads(const int &n, std::vector<Thread*>& threads);

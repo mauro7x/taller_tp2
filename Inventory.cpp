@@ -13,30 +13,30 @@ InventoryProtected::InventoryProtected() : permamently_closed(false) {
 }
 
 
-void InventoryProtected::addResource(Resource& resource) {
+void InventoryProtected::addResource(const Resource& resource) {
     std::unique_lock<std::mutex> l(m);
     inventory[resource]+= 1;
     cv.notify_all();
 }
 
 
-bool InventoryProtected::haveEnoughResources(Recipe& recipe) {
-    return ((inventory[WHEAT] >= recipe[WHEAT]) &&
-            (inventory[WOOD] >= recipe[WOOD]) &&
-            (inventory[IRON] >= recipe[IRON]) &&
-            (inventory[COAL] >= recipe[COAL]));
+bool InventoryProtected::haveEnoughResources(const Recipe& recipe) const {
+    return ((inventory.at(WHEAT) >= recipe.at(WHEAT)) &&
+            (inventory.at(WOOD) >= recipe.at(WOOD)) &&
+            (inventory.at(IRON) >= recipe.at(IRON)) &&
+            (inventory.at(COAL) >= recipe.at(COAL)));
 }
 
 
-void InventoryProtected::removeResources(Recipe& recipe) {
-    inventory[WHEAT] -= recipe[WHEAT];
-    inventory[WOOD] -= recipe[WOOD];
-    inventory[IRON] -= recipe[IRON];
-    inventory[COAL] -= recipe[COAL];
+void InventoryProtected::removeResources(const Recipe& recipe) {
+    inventory[WHEAT] -= recipe.at(WHEAT);
+    inventory[WOOD] -= recipe.at(WOOD);
+    inventory[IRON] -= recipe.at(IRON);
+    inventory[COAL] -= recipe.at(COAL);
 }
 
 
-bool InventoryProtected::getResourcesToProduce(Recipe& recipe) {
+bool InventoryProtected::getResourcesToProduce(const Recipe& recipe) {
     std::unique_lock<std::mutex> l(m);
     
     while (!haveEnoughResources(recipe)) {
@@ -52,9 +52,9 @@ bool InventoryProtected::getResourcesToProduce(Recipe& recipe) {
 }
 
 
-int InventoryProtected::operator[](Resource r) {
+int InventoryProtected::operator[](const Resource r) {
     std::unique_lock<std::mutex> l(m);
-    return inventory[r];
+    return inventory.at(r);
 }
 
 

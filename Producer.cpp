@@ -12,7 +12,7 @@
 //-----------------------------------------------------------------------------
 
 Producer::Producer(InventoryProtected &inventory, CounterProtected &points,
-                   int profitForProducing, Recipe& recipe) : 
+                   const int profitForProducing, const Recipe& recipe) : 
                    profitForProducing(profitForProducing),
                    inventory(inventory), points(points), recipe(recipe) {}
 

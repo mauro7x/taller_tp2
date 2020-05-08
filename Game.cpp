@@ -47,7 +47,7 @@ void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
 }
 
 
-void Game::spawnProducers(const int &n, int profitForProducing, Recipe& recipe) {
+void Game::spawnProducers(const int &n, int profitForProducing, const Recipe& recipe) {
     for (int i = 0; i < n; i++) {
         Producer* ptr = new Producer(inventory, points, profitForProducing,
                                      recipe);

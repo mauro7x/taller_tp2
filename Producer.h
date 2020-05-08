@@ -15,14 +15,14 @@
 
 class Producer : public Thread {
     private:
-        int profitForProducing;
+        const int profitForProducing;
         InventoryProtected& inventory;
         CounterProtected& points;
-        Recipe& recipe;
+        const Recipe& recipe;
 
     public:
         Producer(InventoryProtected& inventory, CounterProtected& points,
-                 int profitForProducing, Recipe& recipe);
+                 const int profitForProducing, const Recipe& recipe);
         virtual void run() override;
         virtual ~Producer();
 };

@@ -25,17 +25,17 @@ class InventoryProtected {
         bool permamently_closed;
         std::condition_variable cv;
 
-        bool haveEnoughResources(Recipe& recipe);
-        void removeResources(Recipe& recipe);
+        bool haveEnoughResources(const Recipe& recipe) const;
+        void removeResources(const Recipe& recipe);
 
     public:
         InventoryProtected();
         InventoryProtected(const InventoryProtected&) = delete;
         InventoryProtected& operator=(const InventoryProtected&) = delete;
 
-        void addResource(Resource& resource);
-        bool getResourcesToProduce(Recipe& recipe);
-        int operator[](Resource r);
+        void addResource(const Resource& resource);
+        bool getResourcesToProduce(const Recipe& recipe);
+        int operator[](const Resource r);
         void close();
 
         ~InventoryProtected();
