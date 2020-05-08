@@ -9,17 +9,17 @@
 
 //-----------------------------------------------------------------------------
 
-Producer::Producer(Inventory &inventory, CounterProtected &points) :
+Producer::Producer(InventoryProtected &inventory, CounterProtected &points) :
                    inventory(inventory), points(points) {}
 
 
 void Producer::run() {
-    // do something
+
 }
 
 
 Producer::~Producer() {
-    
+
 }
 
 

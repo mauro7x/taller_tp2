@@ -2,8 +2,8 @@
 
 //-----------------------------------------------------------------------------
 #include <iostream>
-#include <exception>
 
+#include "Exception.h"
 #include "WorkersConfig.h"
 #include "MapParser.h"
 
@@ -28,6 +28,7 @@ Game::Game(std::string workers_path, std::string map_path) :
     gatherers.reserve(total_gatherers);
     producers.reserve(total_producers);
 }
+
 
 
 void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
@@ -125,7 +126,7 @@ void Game::distributeResources() {
 }
 
 
-void Game::closeQueues() {
+void Game::closeResourceQueues() {
     farmers_source.close();
     lumberjacks_source.close();
     miners_source.close();
@@ -135,37 +136,50 @@ void Game::closeQueues() {
 // incompleta
 void Game::printResults() {
     std::cout << "Recursos restantes:\n";
-    std::cout << "  - Trigo: ?\n";
-    std::cout << "  - Madera: ?\n";
-    std::cout << "  - Carbon: ?\n";
-    std::cout << "  - Hierro: ?\n\n";
-
+    std::cout << "  - Trigo: "<< inventory[WHEAT] << "\n";
+    std::cout << "  - Madera: "<< inventory[WOOD] << "\n";
+    std::cout << "  - Carbon: "<< inventory[COAL] << "\n";
+    std::cout << "  - Hierro: "<< inventory[IRON] << "\n\n";
+    
     std::cout << "Puntos de Beneficio acumulados: ";
     std::cout << points.getValue() << "\n";
 }
 
 
+void Game::forceFinish() {
+    closeResourceQueues();
+    joinThreads(total_gatherers, gatherers);
+    inventory.close();
+    joinThreads(total_producers, producers);
+}
+
+
 void Game::run() { // main thread
     try {
+        // Spawneamos a los workers y los ponemos a correr
         spawnWorkers();
         startThreads(total_gatherers, gatherers);
         startThreads(total_producers, producers);
 
-        // repartir recursos entre las colas
+        // Repartimos los recursos y luego cerramos las fuentes
         distributeResources();
-        closeQueues();
+        closeResourceQueues();
 
+        // Esperamos que terminen los recolectores
         joinThreads(total_gatherers, gatherers);
-        // acá avisarle al inventario que no va a recibir más (cola bloq?)
-        joinThreads(total_producers, producers);
 
-        printResults();
+        // Cerramos el inventario para que terminen los productores
+        inventory.close();
+
+        // Esperamos que terminen los productores y salimos
+        joinThreads(total_producers, producers);
 
     } catch(const Exception& e) {
-        joinThreads(total_gatherers, gatherers);
-        joinThreads(total_producers, producers);
+        forceFinish();
         throw e;
     }
+
+    printResults();
 }
 
 
@@ -173,6 +187,5 @@ Game::~Game() {
     freeThreads(total_gatherers, gatherers);
     freeThreads(total_producers, producers);
 }
-
 
 //-----------------------------------------------------------------------------

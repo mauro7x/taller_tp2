@@ -11,11 +11,11 @@
 
 class Producer : public Thread {
     private:
-        Inventory& inventory;
+        InventoryProtected& inventory;
         CounterProtected& points;
 
     public:
-        Producer(Inventory& inventory, CounterProtected& source);
+        Producer(InventoryProtected& inventory, CounterProtected& source);
         virtual void run() override;
         virtual ~Producer();
 };

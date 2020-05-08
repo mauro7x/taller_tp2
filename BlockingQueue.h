@@ -5,8 +5,10 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
+//-----------------------------------------------------------------------------
 
-#include "Exception.h"
+//-----------------------------------------------------------------------------
+#define QUEUE_CLOSED 0;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -16,10 +18,10 @@ template <class T> class BlockingQueue {
         std::mutex m;
         std::queue<T> queue;
         std::condition_variable cv;
-        bool permanentlyClosed;
+        bool permanently_closed;
 
     public:
-        BlockingQueue() : permanentlyClosed(false) {}
+        BlockingQueue() : permanently_closed(false) {}
         BlockingQueue(const BlockingQueue&) = delete;
         BlockingQueue& operator=(const BlockingQueue&) = delete;
 
@@ -32,10 +34,10 @@ template <class T> class BlockingQueue {
         T pop() {
             std::unique_lock<std::mutex> l(m);
             while (queue.empty()) {
-                if (permanentlyClosed) {
-                    throw(Exception(QUEUE_CLOSED, "Cola vacía y cerrada."));
+                if (permanently_closed) {
+                    return QUEUE_CLOSED;
                 }
-            
+
                 cv.wait(l);
             }
 
@@ -46,7 +48,7 @@ template <class T> class BlockingQueue {
 
         void close() {
             std::unique_lock<std::mutex> l(m);
-            permanentlyClosed = true;
+            permanently_closed = true;
             cv.notify_all();
         }
 

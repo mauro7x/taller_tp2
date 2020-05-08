@@ -1,20 +1,25 @@
 #include "Gatherer.h"
 
 //-----------------------------------------------------------------------------
-#include <iostream>
+#include <unistd.h> // usleep
 
+#include "resources.h"
 #include "Inventory.h"
 #include "BlockingQueue.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-Gatherer::Gatherer(Inventory &inventory, BlockingQueue<int> &source) :
+Gatherer::Gatherer(InventoryProtected &inventory, BlockingQueue<int> &source) :
                    inventory(inventory), source(source) {}
 
 
 void Gatherer::run() {
-    // do nofin
+    Resource resource;
+    while ((resource = source.pop())) {
+        usleep(50*1000); // usleep usa microsegundos, lo pasamos a milisegundos
+        inventory.addResource(resource);
+    }
 }
 
 

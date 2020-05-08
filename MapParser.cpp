@@ -10,8 +10,8 @@
 //-----------------------------------------------------------------------------
 
 MapParser::MapParser(std::string filepath) {
-    resource_mapper = ResourceMapper({{'M', WOOD}, {'T', WHEAT}, {'C', COAL},
-                       {'H', IRON}});
+    resource_mapper.insert({{'M', WOOD}, {'T', WHEAT},
+                           {'C', COAL}, {'H', IRON}});
     file.open(filepath);
     if (!file.is_open()) {
         throw(Exception(INPUT_ERROR, "Error: no se pudo abrir el archivo. "
@@ -27,19 +27,15 @@ bool MapParser::isResourceValid(char resource) const {
 
 Resource MapParser::popResource() {
     char resource;
-
-    if (file.get(resource)) {
-        if (resource == '\n') {
-            file.get(resource);
-        }
+    while(file >> std::skipws >> resource) {
         if (!isResourceValid(resource)) {
             throw(Exception(INPUT_ERROR, "Error: recurso desconocido. "
                         "Función: MapParser::popResource()."));
         }
         return resource_mapper[resource];
-    } else {
-        return NO_MORE_RESOURCES;
     }
+
+    return NO_MORE_RESOURCES;
 }
 
 

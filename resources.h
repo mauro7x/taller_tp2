@@ -5,7 +5,6 @@
 
 typedef int Resource;
 
-#define NO_MORE_RESOURCES 0
 #define WHEAT 1
 #define WOOD 2
 #define IRON 3

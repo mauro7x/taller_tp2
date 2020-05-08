@@ -11,11 +11,11 @@
 
 class Gatherer : public Thread {
     private:
-        Inventory& inventory;
+        InventoryProtected& inventory;
         BlockingQueue<int>& source;
 
     public:
-        Gatherer(Inventory& inventory, BlockingQueue<int>& source);
+        Gatherer(InventoryProtected& inventory, BlockingQueue<int>& source);
         virtual void run() override;
         virtual ~Gatherer();
 };

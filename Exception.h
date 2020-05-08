@@ -8,9 +8,8 @@
 // Códigos de error:
 #define INPUT_ERROR 1
 #define USAGE_ERROR 2
-#define QUEUE_CLOSED 3
-#define ALLOC_ERROR 4
-#define UNEXPECTED_NULL 5
+#define ALLOC_ERROR 3
+#define UNEXPECTED_NULL 4
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

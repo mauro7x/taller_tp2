@@ -2,21 +2,36 @@
 #define __INVENTORY_H__
 
 //-----------------------------------------------------------------------------
-// includes
+#include <mutex>
+#include <unordered_map>
+#include <condition_variable>
+
+#include "resources.h"
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+typedef std::unordered_map<Resource, int> Inventory;
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-class Inventory {
+class InventoryProtected {
     private:
-        // stuff
+        Inventory inventory;
+        std::mutex m;
+        bool permamently_closed;
+        std::condition_variable cv;
 
     public:
-        Inventory();
-        Inventory(const Inventory&) = delete;
-        Inventory& operator=(const Inventory&) = delete;
+        InventoryProtected();
+        InventoryProtected(const InventoryProtected&) = delete;
+        InventoryProtected& operator=(const InventoryProtected&) = delete;
 
-        ~Inventory();
+        void addResource(Resource resource);
+        int operator[](Resource r);
+        void close();
+
+        ~InventoryProtected();
 };
 
 //-----------------------------------------------------------------------------

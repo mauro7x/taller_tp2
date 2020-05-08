@@ -26,11 +26,11 @@ class Game {
         MapParser map;
         
         // game static stuff
-        Inventory inventory;
+        InventoryProtected inventory;
+        CounterProtected points;
         BlockingQueue<Resource> farmers_source;
         BlockingQueue<Resource> lumberjacks_source;
         BlockingQueue<Resource> miners_source;
-        CounterProtected points;
 
         // threads
         int total_gatherers;
@@ -48,18 +48,17 @@ class Game {
 
         // resource methods
         void distributeResources();
-        void closeQueues();
+        void closeResourceQueues();
 
         // general methods
+        void forceFinish();
         void printResults();
 
     public:
         Game(std::string workers_path, std::string map_path);
         Game(const Game&) = delete;
         Game& operator=(const Game&) = delete;
-
         void run();
-
         ~Game();
 };
 
