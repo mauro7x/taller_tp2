@@ -1,20 +1,27 @@
 #include "Producer.h"
 
 //-----------------------------------------------------------------------------
-#include <iostream>
+#include <unistd.h> // usleep
 
 #include "Inventory.h"
 #include "Counter.h"
+
+#include "game_constants.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-Producer::Producer(InventoryProtected &inventory, CounterProtected &points) :
-                   inventory(inventory), points(points) {}
+Producer::Producer(InventoryProtected &inventory, CounterProtected &points,
+                   int profitForProducing, Recipe& recipe) : 
+                   profitForProducing(profitForProducing),
+                   inventory(inventory), points(points), recipe(recipe) {}
 
 
 void Producer::run() {
-
+    while (inventory.getResourcesToProduce(recipe)) {
+        usleep(PRODUCER_SLEEP_TIME_US);
+        points.increment(profitForProducing);
+    }
 }
 
 

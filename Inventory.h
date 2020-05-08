@@ -11,6 +11,9 @@
 
 //-----------------------------------------------------------------------------
 typedef std::unordered_map<Resource, int> Inventory;
+typedef std::unordered_map<Resource, int> Recipe;
+
+#define INVENTORY_CLOSED 0
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -22,12 +25,16 @@ class InventoryProtected {
         bool permamently_closed;
         std::condition_variable cv;
 
+        bool haveEnoughResources(Recipe& recipe);
+        void removeResources(Recipe& recipe);
+
     public:
         InventoryProtected();
         InventoryProtected(const InventoryProtected&) = delete;
         InventoryProtected& operator=(const InventoryProtected&) = delete;
 
-        void addResource(Resource resource);
+        void addResource(Resource& resource);
+        bool getResourcesToProduce(Recipe& recipe);
         int operator[](Resource r);
         void close();
 

@@ -2,6 +2,7 @@
 
 //-----------------------------------------------------------------------------
 #include <iostream>
+#include <unordered_map>
 
 #include "Exception.h"
 #include "WorkersConfig.h"
@@ -27,8 +28,11 @@ Game::Game(std::string workers_path, std::string map_path) :
     this->total_producers = workers_config.getTotalProducers();
     gatherers.reserve(total_gatherers);
     producers.reserve(total_producers);
-}
 
+    cooks_recipe.insert(COOK_RECIPE);
+    carpenters_recipe.insert(CARPENTER_RECIPE);
+    blacksmiths_recipe.insert(BLACKSMITH_RECIPE);
+}
 
 
 void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
@@ -43,10 +47,10 @@ void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
 }
 
 
-// incompleta
-void Game::spawnProducers(const int &n) {
+void Game::spawnProducers(const int &n, int profitForProducing, Recipe& recipe) {
     for (int i = 0; i < n; i++) {
-        Producer* ptr = new Producer(inventory, points);
+        Producer* ptr = new Producer(inventory, points, profitForProducing,
+                                     recipe);
         if (ptr == NULL) {
             throw(Exception(ALLOC_ERROR, "Error: no se pudo reservar memoria. "
                         "Función: Game::spawnProducers()"));
@@ -56,15 +60,17 @@ void Game::spawnProducers(const int &n) {
 }
 
 
-//incompleta
 void Game::spawnWorkers() {
     try {
         spawnGatherers(workers_config.getFarmers(), farmers_source);
         spawnGatherers(workers_config.getLumberjacks(), lumberjacks_source);
         spawnGatherers(workers_config.getMiners(), miners_source);
-        
-        // incompleta, separar en productores
-        spawnProducers(total_producers);
+
+        spawnProducers(workers_config.getCooks(), COOK_PROFIT, cooks_recipe);
+        spawnProducers(workers_config.getCarpenters(), CARPENTER_PROFIT,
+                       carpenters_recipe);
+        spawnProducers(workers_config.getBlacksmiths(), BLACKSMITH_PROFIT,
+                       blacksmiths_recipe);
 
     } catch(const Exception& e) {
         throw e;
@@ -133,14 +139,13 @@ void Game::closeResourceQueues() {
 }
 
 
-// incompleta
 void Game::printResults() {
     std::cout << "Recursos restantes:\n";
     std::cout << "  - Trigo: "<< inventory[WHEAT] << "\n";
     std::cout << "  - Madera: "<< inventory[WOOD] << "\n";
     std::cout << "  - Carbon: "<< inventory[COAL] << "\n";
     std::cout << "  - Hierro: "<< inventory[IRON] << "\n\n";
-    
+
     std::cout << "Puntos de Beneficio acumulados: ";
     std::cout << points.getValue() << "\n";
 }

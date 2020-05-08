@@ -6,6 +6,8 @@
 #include "resources.h"
 #include "Inventory.h"
 #include "BlockingQueue.h"
+
+#include "game_constants.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -17,7 +19,7 @@ Gatherer::Gatherer(InventoryProtected &inventory, BlockingQueue<int> &source) :
 void Gatherer::run() {
     Resource resource;
     while ((resource = source.pop())) {
-        usleep(50*1000); // usleep usa microsegundos, lo pasamos a milisegundos
+        usleep(GATHERER_SLEEP_TIME_US);
         inventory.addResource(resource);
     }
 }

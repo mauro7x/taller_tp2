@@ -16,7 +16,6 @@
 #include "resources.h"
 //-----------------------------------------------------------------------------
 
-
 //-----------------------------------------------------------------------------
 
 class Game {
@@ -28,20 +27,20 @@ class Game {
         // game static stuff
         InventoryProtected inventory;
         CounterProtected points;
-        BlockingQueue<Resource> farmers_source;
-        BlockingQueue<Resource> lumberjacks_source;
-        BlockingQueue<Resource> miners_source;
+        BlockingQueue<Resource> farmers_source, lumberjacks_source,
+                                miners_source;
+        Recipe cooks_recipe, carpenters_recipe, blacksmiths_recipe;
 
         // threads
+        std::vector<Thread*> gatherers, producers;
         int total_gatherers;
-        std::vector<Thread*> gatherers;
-        int total_producers;
-        std::vector<Thread*> producers;
+        int total_producers;       
 
         // thread methods
         void spawnWorkers();
         void spawnGatherers(const int &n, BlockingQueue<Resource>& source);
-        void spawnProducers(const int &n); // INCOMPLETA
+        void spawnProducers(const int &n, int profitForProducing,
+                            Recipe& recipe);
         void startThreads(const int &n, std::vector<Thread*>& threads);
         void joinThreads(const int &n, std::vector<Thread*>& threads);
         void freeThreads(const int &n, std::vector<Thread*>& threads);
