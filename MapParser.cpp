@@ -9,7 +9,7 @@
 
 //-----------------------------------------------------------------------------
 
-MapParser::MapParser(std::string filepath) {
+MapParser::MapParser(const std::string filepath) {
     resource_mapper.insert({{'M', WOOD}, {'T', WHEAT},
                            {'C', COAL}, {'H', IRON}});
     file.open(filepath);
@@ -20,7 +20,7 @@ MapParser::MapParser(std::string filepath) {
 }
 
 
-bool MapParser::isResourceValid(char resource) const {
+bool MapParser::isResourceValid(const char resource) const {
     return (resource_mapper.count(resource) > 0);
 }
 

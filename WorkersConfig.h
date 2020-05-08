@@ -22,25 +22,26 @@ class WorkersConfig {
     private:
         std::unordered_map<std::string, int> quantities;
 
-        void parseFile(std::string filepath);
-        void setWorkerQuantity(std::string worker, std::string quantity);
-        bool isValueValid(std::string value) const;
-        bool isValueSet(std::string value) const;
+        void parseFile(const std::string filepath);
+        void setWorkerQuantity(const std::string worker,
+                               const std::string quantity);
+        bool isValueValid(const std::string value) const;
+        bool isValueSet(const std::string value) const;
         bool areAllValuesSet() const;
 
     public:
-        WorkersConfig(std::string filepath);
+        WorkersConfig(const std::string filepath);
         WorkersConfig(const WorkersConfig&) = delete;
         WorkersConfig& operator=(const WorkersConfig&) = delete;
         
-        int getTotalGatherers();
-        int getTotalProducers();
-        int getFarmers();
-        int getLumberjacks();
-        int getMiners();
-        int getCooks();
-        int getCarpenters();
-        int getBlacksmiths();
+        int getTotalGatherers() const;
+        int getTotalProducers() const;
+        int getFarmers() const;
+        int getLumberjacks() const;
+        int getMiners() const;
+        int getCooks() const;
+        int getCarpenters() const;
+        int getBlacksmiths() const;
 
         ~WorkersConfig();
 };

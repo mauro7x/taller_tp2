@@ -10,7 +10,7 @@
 
 //-----------------------------------------------------------------------------
 
-Exception::Exception(int error_code, std::string error_msg) :
+Exception::Exception(const int error_code, const std::string error_msg) :
                      error_code(error_code), error_msg(error_msg) {}
 
 

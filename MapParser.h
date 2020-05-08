@@ -21,10 +21,10 @@ class MapParser {
     private:
         std::ifstream file;
         ResourceMapper resource_mapper;
-        bool isResourceValid(char resource) const;
+        bool isResourceValid(const char resource) const;
 
     public:
-        MapParser(std::string filepath);
+        MapParser(const std::string filepath);
         MapParser(const MapParser&) = delete;
         MapParser& operator=(const MapParser&) = delete;
         Resource popResource();

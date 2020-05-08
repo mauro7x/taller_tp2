@@ -20,7 +20,7 @@ class Exception : virtual public std::exception {
         std::string error_msg;
 
     public:
-        explicit Exception(int error_code, std::string error_msg);
+        explicit Exception(const int error_code, const std::string error_msg);
         int getErrorCode() const throw ();
         const char* what() const throw ();
         ~Exception() throw ();

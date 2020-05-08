@@ -9,7 +9,7 @@
 
 //-----------------------------------------------------------------------------
 
-WorkersConfig::WorkersConfig(std::string filepath) {
+WorkersConfig::WorkersConfig(const std::string filepath) {
     try {
         parseFile(filepath);
     } catch(const Exception& e) {
@@ -18,7 +18,7 @@ WorkersConfig::WorkersConfig(std::string filepath) {
 }
 
 
-void WorkersConfig::parseFile(std::string filepath) {
+void WorkersConfig::parseFile(const std::string filepath) {
     std::ifstream config_file;
     config_file.open(filepath);
     if (!config_file.is_open()) {
@@ -46,8 +46,8 @@ void WorkersConfig::parseFile(std::string filepath) {
 }
 
 
-void WorkersConfig::setWorkerQuantity(std::string worker,
-                                      std::string quantity) {
+void WorkersConfig::setWorkerQuantity(const std::string worker,
+                                      const std::string quantity) {
     if (!isValueValid(worker)) {
         throw(Exception(INPUT_ERROR, "Error: input desconocido. "
                         "Función: WorkersConfig::setWorkerQuantity()."));
@@ -62,13 +62,13 @@ void WorkersConfig::setWorkerQuantity(std::string worker,
 }
 
 
-bool WorkersConfig::isValueValid(std::string value) const {
+bool WorkersConfig::isValueValid(const std::string value) const {
     return(value == FARMERS || value == LUMBERJACKS || value == MINERS ||
            value == COOKS || value == CARPENTERS || value == BLACKSMITHS);
 }
 
 
-bool WorkersConfig::isValueSet(std::string value) const {
+bool WorkersConfig::isValueSet(const std::string value) const {
     return (quantities.count(value) > 0);
 }
 
@@ -80,43 +80,43 @@ bool WorkersConfig::areAllValuesSet() const {
 }
 
 
-int WorkersConfig::getTotalGatherers() {
-    return (quantities[FARMERS] + quantities[LUMBERJACKS] + quantities[MINERS]);
+int WorkersConfig::getTotalGatherers() const {
+    return (quantities.at(FARMERS) + quantities.at(LUMBERJACKS) + quantities.at(MINERS));
 }
 
 
-int WorkersConfig::getTotalProducers() {
-    return (quantities[COOKS] + quantities[CARPENTERS] + quantities[BLACKSMITHS]);
+int WorkersConfig::getTotalProducers() const {
+    return (quantities.at(COOKS) + quantities.at(CARPENTERS) + quantities.at(BLACKSMITHS));
 }
 
 
-int WorkersConfig::getFarmers() {
-    return quantities[FARMERS];
+int WorkersConfig::getFarmers() const {
+    return quantities.at(FARMERS);
 }
 
 
-int WorkersConfig::getLumberjacks() {
-    return quantities[LUMBERJACKS];
+int WorkersConfig::getLumberjacks() const {
+    return quantities.at(LUMBERJACKS);
 }
 
 
-int WorkersConfig::getMiners() {
-    return quantities[MINERS];
+int WorkersConfig::getMiners() const {
+    return quantities.at(MINERS);
 }
 
 
-int WorkersConfig::getCooks() {
-    return quantities[COOKS];
+int WorkersConfig::getCooks() const {
+    return quantities.at(COOKS);
 }
 
 
-int WorkersConfig::getCarpenters() {
-    return quantities[CARPENTERS];
+int WorkersConfig::getCarpenters() const {
+    return quantities.at(CARPENTERS);
 }
 
 
-int WorkersConfig::getBlacksmiths() {
-    return quantities[BLACKSMITHS];
+int WorkersConfig::getBlacksmiths() const {
+    return quantities.at(BLACKSMITHS);
 }
 
 
