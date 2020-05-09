@@ -24,7 +24,7 @@ class MapParser {
         bool isResourceValid(const char resource) const;
 
     public:
-        MapParser(const std::string filepath);
+        explicit MapParser(const std::string filepath);
         MapParser(const MapParser&) = delete;
         MapParser& operator=(const MapParser&) = delete;
         Resource popResource();

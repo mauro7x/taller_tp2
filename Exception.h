@@ -21,9 +21,9 @@ class Exception : virtual public std::exception {
 
     public:
         explicit Exception(const int error_code, const std::string error_msg);
-        int getErrorCode() const throw ();
-        const char* what() const throw ();
-        ~Exception() throw ();
+        int getErrorCode() const throw();
+        const char* what() const throw();
+        ~Exception() throw();
 };
 
 //-----------------------------------------------------------------------------

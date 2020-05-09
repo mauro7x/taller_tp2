@@ -3,6 +3,8 @@
 //-----------------------------------------------------------------------------
 #include <iostream>
 #include <unordered_map>
+#include <string>
+#include <vector>
 
 #include "Exception.h"
 #include "WorkersConfig.h"
@@ -23,7 +25,6 @@
 
 Game::Game(std::string workers_path, std::string map_path) :
            workers_config(workers_path), map(map_path) {
-
     this->total_gatherers = workers_config.getTotalGatherers();
     this->total_producers = workers_config.getTotalProducers();
     gatherers.reserve(total_gatherers);
@@ -47,7 +48,8 @@ void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
 }
 
 
-void Game::spawnProducers(const int &n, int profitForProducing, const Recipe& recipe) {
+void Game::spawnProducers(const int &n, int profitForProducing,
+                          const Recipe& recipe) {
     for (int i = 0; i < n; i++) {
         Producer* ptr = new Producer(inventory, points, profitForProducing,
                                      recipe);
@@ -71,7 +73,6 @@ void Game::spawnWorkers() {
                        carpenters_recipe);
         spawnProducers(workers_config.getBlacksmiths(), BLACKSMITH_PROFIT,
                        blacksmiths_recipe);
-
     } catch(const Exception& e) {
         throw e;
     }
@@ -178,7 +179,6 @@ void Game::run() { // main thread
 
         // Esperamos que terminen los productores y salimos
         joinThreads(total_producers, producers);
-
     } catch(const Exception& e) {
         forceFinish();
         throw e;

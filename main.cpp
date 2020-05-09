@@ -8,6 +8,7 @@
 
 //-----------------------------------------------------------------------------
 #include <iostream>
+#include <string>
 
 #include "Game.h"
 #include "Exception.h"

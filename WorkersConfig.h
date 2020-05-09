@@ -30,7 +30,7 @@ class WorkersConfig {
         bool areAllValuesSet() const;
 
     public:
-        WorkersConfig(const std::string filepath);
+        explicit WorkersConfig(const std::string filepath);
         WorkersConfig(const WorkersConfig&) = delete;
         WorkersConfig& operator=(const WorkersConfig&) = delete;
         

@@ -27,7 +27,7 @@ bool MapParser::isResourceValid(const char resource) const {
 
 Resource MapParser::popResource() {
     char resource;
-    while(file >> std::skipws >> resource) {
+    while (file >> std::skipws >> resource) {
         if (!isResourceValid(resource)) {
             throw(Exception(INPUT_ERROR, "Error: recurso desconocido. "
                         "Función: MapParser::popResource()."));

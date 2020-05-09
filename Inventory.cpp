@@ -65,9 +65,7 @@ void InventoryProtected::close() {
 }
 
 
-InventoryProtected::~InventoryProtected() {
-    
-}
+InventoryProtected::~InventoryProtected() {}
 
 
 //-----------------------------------------------------------------------------

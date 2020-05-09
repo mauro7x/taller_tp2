@@ -81,12 +81,14 @@ bool WorkersConfig::areAllValuesSet() const {
 
 
 int WorkersConfig::getTotalGatherers() const {
-    return (quantities.at(FARMERS) + quantities.at(LUMBERJACKS) + quantities.at(MINERS));
+    return (quantities.at(FARMERS) + quantities.at(LUMBERJACKS) +
+            quantities.at(MINERS));
 }
 
 
 int WorkersConfig::getTotalProducers() const {
-    return (quantities.at(COOKS) + quantities.at(CARPENTERS) + quantities.at(BLACKSMITHS));
+    return (quantities.at(COOKS) + quantities.at(CARPENTERS) +
+            quantities.at(BLACKSMITHS));
 }
 
 
@@ -120,9 +122,7 @@ int WorkersConfig::getBlacksmiths() const {
 }
 
 
-WorkersConfig::~WorkersConfig() {
-
-}
+WorkersConfig::~WorkersConfig() {}
 
 
 //-----------------------------------------------------------------------------
