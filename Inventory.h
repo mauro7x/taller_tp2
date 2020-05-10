@@ -6,14 +6,12 @@
 #include <unordered_map>
 #include <condition_variable>
 
-#include "resources.h"
+#include "Resources.h"
+#include "Recipes.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 typedef std::unordered_map<Resource, int> Inventory;
-typedef std::unordered_map<Resource, int> Recipe;
-
-#define INVENTORY_CLOSED 0
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

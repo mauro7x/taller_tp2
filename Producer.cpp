@@ -3,7 +3,9 @@
 //-----------------------------------------------------------------------------
 #include <unistd.h> // usleep
 
+#include "Thread.h"
 #include "Inventory.h"
+#include "Recipes.h"
 #include "Counter.h"
 
 #include "game_constants.h"

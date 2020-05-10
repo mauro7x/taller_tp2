@@ -3,16 +3,16 @@
 //-----------------------------------------------------------------------------
 #include <unistd.h> // usleep
 
-#include "resources.h"
+#include "Resources.h"
 #include "Inventory.h"
-#include "BlockingQueue.h"
+#include "ResourceQueue.h"
 
 #include "game_constants.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 
-Gatherer::Gatherer(InventoryProtected &inventory, BlockingQueue<int> &source) :
+Gatherer::Gatherer(InventoryProtected &inventory, ResourceQueue& source) :
                    inventory(inventory), source(source) {}
 
 
