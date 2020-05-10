@@ -21,7 +21,7 @@ class CounterProtected {
 
     public:
         /** 
-         * Descripcion: constructor.
+         * Descripcion: constructor. Inicia en 0 el valor.
          * Parametros: -
         */
         CounterProtected();

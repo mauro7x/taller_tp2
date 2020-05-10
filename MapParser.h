@@ -37,9 +37,9 @@ class MapParser {
         bool isResourceValid(const char resource) const;
 
     public:
-
         /** 
-         * Descripcion: constructor.
+         * Descripcion: constructor. Abre el archivo especificado por la
+         * ruta. Si no se puede, lanza una excepción.
          * Parametros: ruta constante al archivo.
         */
         explicit MapParser(const std::string filepath);

@@ -24,7 +24,6 @@ class Producer : public Thread {
         const Recipe& recipe;
 
     public:
-
         /** 
          * Descripcion: constructor.
          * Parametros: referencias al inventario y al contador de puntos

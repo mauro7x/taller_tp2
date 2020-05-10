@@ -52,9 +52,8 @@ class InventoryProtected {
         void removeResources(const Recipe& recipe);
 
     public:
-
         /** 
-         * Descripcion: constructor.
+         * Descripcion: constructor. Inicia con 0 de cada recurso.
          * Parametros: -
         */
         InventoryProtected();

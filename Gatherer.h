@@ -20,7 +20,6 @@ class Gatherer : public Thread {
         ResourceQueue& source;
 
     public:
-
         /** 
          * Descripcion: constuctor.
          * Parametros: referencias al inventario y a la cola de recursos.

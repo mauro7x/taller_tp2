@@ -68,9 +68,8 @@ class WorkersConfig {
         bool areAllValuesSet() const;
 
     public:
-
         /** 
-         * Descripcion: constructor.
+         * Descripcion: constructor. Llama a parseFile, levanta excepciones.
          * Parametros: ruta constante al archivo de configuración.
         */
         explicit WorkersConfig(const std::string filepath);

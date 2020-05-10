@@ -124,9 +124,10 @@ class Game {
         void printResults();
 
     public:
-
         /** 
-         * Descripcion: constructor.
+         * Descripcion: constructor. Establece los valores de total_gatherers,
+         * total_producers, y reserva el espacio para los mismos en sus
+         * respectivos vectores. Inicia las recetas de los productores.
          * Parametros: rutas al archivo de configuración de los workers,
          * y del mapa.
         */

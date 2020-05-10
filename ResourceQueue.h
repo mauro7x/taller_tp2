@@ -35,7 +35,6 @@ class ResourceQueue {
         bool permanently_closed;
 
     public:
-
         /** 
          * Descripcion: constructor.
          * Parametros: -

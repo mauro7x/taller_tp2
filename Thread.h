@@ -16,7 +16,6 @@ class Thread {
     std::thread thread;
 
     public:
-
         /** 
          * Descripcion: constructor.
          * Parametros: -
