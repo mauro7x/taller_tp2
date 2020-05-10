@@ -17,17 +17,53 @@ typedef std::unordered_map<char, Resource> ResourceMapper;
 
 //-----------------------------------------------------------------------------
 
+
+/**
+ * Parser del mapa. Lee desde un archivo (cuya ruta se recibe) y parsea la
+ * lectura en RECURSOS. Cuando no hay más recursos, devuelve el recurso
+ * INVALID (NO_MORE_RESOURCES).
+*/
 class MapParser {
     private:
         std::ifstream file;
         ResourceMapper resource_mapper;
+
+        /** 
+         * Descripcion: se fija si el recurso que se leyó del archivo
+         * es válido.
+         * Parametros: char constante que representa al recurso leído.
+         * Retorno: TRUE si es válido, FALSE si no.
+        */
         bool isResourceValid(const char resource) const;
 
     public:
+
+        /** 
+         * Descripcion: constructor.
+         * Parametros: ruta constante al archivo.
+        */
         explicit MapParser(const std::string filepath);
+
+
+        /** 
+         * Deshabilitamos el constructor por copia y su operador.
+        */
         MapParser(const MapParser&) = delete;
         MapParser& operator=(const MapParser&) = delete;
+
+
+        /** 
+         * Descripcion: extrae el siguiente recurso del mapa.
+         * Parametros: -
+         * Retorno: recurso extraído. En caso de que no hayan mas,
+         * se retorna el recurso INVALID (0).
+        */
         Resource popResource();
+
+
+        /** 
+         * Descripcion: destructor.
+        */
         ~MapParser();
 };
 

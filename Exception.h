@@ -14,15 +14,43 @@
 
 //-----------------------------------------------------------------------------
 
+/**
+ * Extensión de std::exception para agregar un código de error particular.
+*/
 class Exception : virtual public std::exception {
     private:
         int error_code;
         std::string error_msg;
 
     public:
+        /** 
+         * Descripcion: constructor.
+         * Parametros: codigo de error, mensaje de error.
+        */
         explicit Exception(const int error_code, const std::string error_msg);
+
+
+        /** 
+         * Descripcion: devuelve el código de error.
+         * Parametros: -
+         * Retorno: código de error.
+        */
         int getErrorCode() const throw();
+
+
+        /** 
+         * Descripcion: devuelve el mensaje de error.
+         * Parametros: -
+         * Retorno: mensaje de error.
+         * 
+         * ACLARACION: no hay que ocuparse del puntero recibido.
+        */
         const char* what() const throw();
+        
+        
+        /** 
+         * Descripcion: destructor.
+        */
         ~Exception() throw();
 };
 

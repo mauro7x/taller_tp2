@@ -15,7 +15,7 @@ InventoryProtected::InventoryProtected() : permamently_closed(false) {
 
 void InventoryProtected::addResource(const Resource& resource) {
     std::unique_lock<std::mutex> l(m);
-    inventory[resource]+= 1;
+    inventory[resource] += 1;
     cv.notify_all();
 }
 
@@ -52,9 +52,9 @@ bool InventoryProtected::getResourcesToProduce(const Recipe& recipe) {
 }
 
 
-int InventoryProtected::operator[](const Resource r) {
+int InventoryProtected::operator[](const Resource resource) {
     std::unique_lock<std::mutex> l(m);
-    return inventory.at(r);
+    return inventory.at(resource);
 }
 
 
