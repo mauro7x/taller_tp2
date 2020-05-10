@@ -2,10 +2,9 @@
 #define __PRODUCER_H__
 
 //-----------------------------------------------------------------------------
-#include <unordered_map>
-
 #include "Thread.h"
 #include "Inventory.h"
+#include "Recipes.h"
 #include "Counter.h"
 
 #include "game_constants.h"

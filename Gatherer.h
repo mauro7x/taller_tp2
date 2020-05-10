@@ -3,8 +3,9 @@
 
 //-----------------------------------------------------------------------------
 #include "Thread.h"
+#include "Resources.h"
 #include "Inventory.h"
-#include "BlockingQueue.h"
+#include "ResourceQueue.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -12,10 +13,11 @@
 class Gatherer : public Thread {
     private:
         InventoryProtected& inventory;
-        BlockingQueue<int>& source;
+        ResourceQueue& source;
 
     public:
-        Gatherer(InventoryProtected& inventory, BlockingQueue<int>& source);
+        Gatherer(InventoryProtected& inventory,
+                 ResourceQueue& source);
         virtual void run() override;
         virtual ~Gatherer();
 };

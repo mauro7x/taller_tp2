@@ -2,9 +2,9 @@
 
 //-----------------------------------------------------------------------------
 #include <mutex>
+#include <unordered_map>
+#include <condition_variable>
 //-----------------------------------------------------------------------------
-
-
 
 //-----------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ bool InventoryProtected::getResourcesToProduce(const Recipe& recipe) {
     
     while (!haveEnoughResources(recipe)) {
         if (permamently_closed) {
-            return INVENTORY_CLOSED;
+            return false;
         }
 
         cv.wait(l);

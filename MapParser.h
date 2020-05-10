@@ -6,13 +6,13 @@
 #include <fstream>
 #include <unordered_map> 
 
-#include "resources.h"
+#include "Resources.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-typedef std::unordered_map<char, int> ResourceMapper;
+typedef std::unordered_map<char, Resource> ResourceMapper;
 
-#define NO_MORE_RESOURCES 0
+#define NO_MORE_RESOURCES INVALID
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------

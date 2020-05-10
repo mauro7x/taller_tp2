@@ -9,15 +9,13 @@
 #include "Exception.h"
 #include "WorkersConfig.h"
 #include "MapParser.h"
-
 #include "Inventory.h"
 #include "Counter.h"
-#include "BlockingQueue.h"
-
+#include "ResourceQueue.h"
 #include "Gatherer.h"
 #include "Producer.h"
-
-#include "resources.h"
+#include "Recipes.h"
+#include "Resources.h"
 //-----------------------------------------------------------------------------
 
 
@@ -36,7 +34,7 @@ Game::Game(std::string workers_path, std::string map_path) :
 }
 
 
-void Game::spawnGatherers(const int &n, BlockingQueue<Resource>& source) {
+void Game::spawnGatherers(const int &n, ResourceQueue& source) {
     for (int i = 0; i < n; i++) {
         Gatherer* ptr = new Gatherer(inventory, source);
         if (ptr == NULL) {
@@ -124,6 +122,11 @@ void Game::distributeResources() {
                 case IRON:
                 case COAL:
                     miners_source.push(r);
+                    break;
+                    
+                default:
+                    throw(Exception(UNEXPECTED_NULL, "Error: valor inválido. "
+                        "Función: Game::distributeResources()"));
                     break;
             }
         }

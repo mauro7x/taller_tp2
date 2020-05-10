@@ -6,14 +6,14 @@
 #include <vector>
 
 #include "Thread.h"
-
 #include "WorkersConfig.h"
 #include "MapParser.h"
-#include "BlockingQueue.h"
+#include "ResourceQueue.h"
 #include "Inventory.h"
 #include "Counter.h"
 
-#include "resources.h"
+#include "Recipes.h"
+#include "Resources.h"
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
@@ -27,8 +27,7 @@ class Game {
         // game static stuff
         InventoryProtected inventory;
         CounterProtected points;
-        BlockingQueue<Resource> farmers_source, lumberjacks_source,
-                                miners_source;
+        ResourceQueue farmers_source, lumberjacks_source, miners_source;
         Recipe cooks_recipe, carpenters_recipe, blacksmiths_recipe;
 
         // threads
@@ -38,7 +37,7 @@ class Game {
 
         // thread methods
         void spawnWorkers();
-        void spawnGatherers(const int &n, BlockingQueue<Resource>& source);
+        void spawnGatherers(const int &n, ResourceQueue& source);
         void spawnProducers(const int &n, int profitForProducing,
                             const Recipe& recipe);
         void startThreads(const int &n, std::vector<Thread*>& threads);
