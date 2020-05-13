@@ -100,7 +100,7 @@ void Game::joinThreads(const int &n, std::vector<Thread*>& threads) {
 void Game::freeThreads(const int &n, std::vector<Thread*>& threads) {
     for (int i = 0; i < n; i++) {
         if (threads[i] != NULL) {
-            delete(threads[i]);
+            delete threads[i];
         }
     }
 }
