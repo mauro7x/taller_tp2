@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     try {     
         Game game(workers_filepath, map_filepath);   
         game.run();
-    } catch(const Exception& e) {
+    } catch(Exception& e) {
         std::cerr << e.what() << '\n';
         return e.getErrorCode();
     }
