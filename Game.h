@@ -142,8 +142,9 @@ class Game {
 
 
         /** 
-         * Descripcion: overridea el método de Thread. Método que se 
-         * ejecutará al iniciar el hilo.
+         * Descripcion: Método que organiza la ejecución. Si se quiere
+         * hacer en un hilo, se puede heredar de thread para que
+         * overridee el método run de Thread..
          * Parametros: -
          * Retorno: -
         */
