@@ -22,7 +22,7 @@ Producer::Producer(InventoryProtected &inventory, CounterProtected &points,
 void Producer::run() {
     while (inventory.getResourcesToProduce(recipe)) {
         usleep(PRODUCER_SLEEP_TIME_US);
-        points.increment(profitForProducing);
+        points += profitForProducing;
     }
 }
 

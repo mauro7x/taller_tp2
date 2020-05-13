@@ -99,51 +99,11 @@ class WorkersConfig {
 
 
         /**
-         * Descripcion: devuelve la cantidad de agricultores.
-         * Parametros: -
-         * Retorno: cantidad total de agricultores.
+         * Descripcion: devuelve la cantidad de un worker determinado.
+         * Parametros: worker consulta.
+         * Retorno: cantidad del worker consultado.
         */
-        int getFarmers() const;
-
-
-        /**
-         * Descripcion: devuelve la cantidad de leñadores.
-         * Parametros: -
-         * Retorno: cantidad total de leñadores.
-        */
-        int getLumberjacks() const;
-
-
-        /**
-         * Descripcion: devuelve la cantidad de mineros.
-         * Parametros: -
-         * Retorno: cantidad total de mineros.
-        */
-        int getMiners() const;
-
-
-        /**
-         * Descripcion: devuelve la cantidad de cocineros.
-         * Parametros: -
-         * Retorno: cantidad total de cocineros.
-        */
-        int getCooks() const;
-        
-
-        /**
-         * Descripcion: devuelve la cantidad de carpinteros.
-         * Parametros: -
-         * Retorno: cantidad total de carpinteros.
-        */
-        int getCarpenters() const;
-
-
-        /**
-         * Descripcion: devuelve la cantidad de herreros.
-         * Parametros: -
-         * Retorno: cantidad total de herreros.
-        */
-        int getBlacksmiths() const;
+        int operator[](const std::string& worker) const;
 
 
         /**

@@ -21,7 +21,7 @@
 class Game {
     private:
         // config files
-        WorkersConfig workers_config;
+        WorkersConfig workers_quantities;
         MapParser map;
         
         // game static stuff

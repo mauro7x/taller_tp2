@@ -93,33 +93,8 @@ int WorkersConfig::getTotalProducers() const {
 }
 
 
-int WorkersConfig::getFarmers() const {
-    return quantities.at(FARMERS);
-}
-
-
-int WorkersConfig::getLumberjacks() const {
-    return quantities.at(LUMBERJACKS);
-}
-
-
-int WorkersConfig::getMiners() const {
-    return quantities.at(MINERS);
-}
-
-
-int WorkersConfig::getCooks() const {
-    return quantities.at(COOKS);
-}
-
-
-int WorkersConfig::getCarpenters() const {
-    return quantities.at(CARPENTERS);
-}
-
-
-int WorkersConfig::getBlacksmiths() const {
-    return quantities.at(BLACKSMITHS);
+int WorkersConfig::operator[](const std::string& worker) const {
+    return quantities.at(worker);
 }
 
 
