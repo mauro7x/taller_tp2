@@ -54,11 +54,12 @@ class MapParser {
 
         /** 
          * Descripcion: extrae el siguiente recurso del mapa.
-         * Parametros: -
-         * Retorno: recurso extraído. En caso de que no hayan mas,
-         * se retorna el recurso INVALID (0).
+         * Parametros: referencia al recurso a copiar.
+         * Retorno: -
+         * 
+         * En caso de que no hayan mas, se retorna el recurso INVALID (0).
         */
-        Resource popResource();
+        void operator>>(Resource& r);
 
 
         /** 

@@ -35,11 +35,11 @@ class CounterProtected {
 
 
         /** 
-         * Descripcion: incrementa el valor en 'value'.
+         * Descripcion: sobrecarga el operador += para incrementar el valor.
          * Parametros: valor a incrementar.
-         * Retorno: -
+         * Retorno: referencia al contador incrementado.
         */
-        void increment(const unsigned int value);
+        CounterProtected& operator+=(const unsigned int& value);
 
 
         /** 

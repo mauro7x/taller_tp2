@@ -27,17 +27,17 @@ bool MapParser::isResourceValid(const char resource) const {
 }
 
 
-Resource MapParser::popResource() {
+void MapParser::operator>>(Resource& r) {
     char resource;
-    while (file >> std::skipws >> resource) {
+    if (file >> std::skipws >> resource) {
         if (!isResourceValid(resource)) {
             throw(Exception(INPUT_ERROR, "Error: recurso desconocido. "
                         "Función: MapParser::popResource()."));
         }
-        return resource_mapper[resource];
+        r = resource_mapper[resource];
+    } else {
+        r = NO_MORE_RESOURCES;
     }
-
-    return NO_MORE_RESOURCES;
 }
 
 

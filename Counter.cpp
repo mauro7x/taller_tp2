@@ -5,9 +5,10 @@
 CounterProtected::CounterProtected() : value(0) {}
 
 
-void CounterProtected::increment(const unsigned int value) {
+CounterProtected& CounterProtected::operator+=(const unsigned int& value) {
     std::unique_lock<std::mutex> l(m);
     this->value += value;
+    return *this;
 }
 
 

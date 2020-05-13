@@ -22,9 +22,9 @@
 //-----------------------------------------------------------------------------
 
 Game::Game(std::string workers_path, std::string map_path) :
-           workers_config(workers_path), map(map_path) {
-    this->total_gatherers = workers_config.getTotalGatherers();
-    this->total_producers = workers_config.getTotalProducers();
+           workers_quantities(workers_path), map(map_path) {
+    this->total_gatherers = workers_quantities.getTotalGatherers();
+    this->total_producers = workers_quantities.getTotalProducers();
     gatherers.reserve(total_gatherers);
     producers.reserve(total_producers);
 
@@ -62,14 +62,14 @@ void Game::spawnProducers(const int &n, int profitForProducing,
 
 void Game::spawnWorkers() {
     try {
-        spawnGatherers(workers_config.getFarmers(), farmers_source);
-        spawnGatherers(workers_config.getLumberjacks(), lumberjacks_source);
-        spawnGatherers(workers_config.getMiners(), miners_source);
+        spawnGatherers(workers_quantities[FARMERS], farmers_source);
+        spawnGatherers(workers_quantities[LUMBERJACKS], lumberjacks_source);
+        spawnGatherers(workers_quantities[MINERS], miners_source);
 
-        spawnProducers(workers_config.getCooks(), COOK_PROFIT, cooks_recipe);
-        spawnProducers(workers_config.getCarpenters(), CARPENTER_PROFIT,
+        spawnProducers(workers_quantities[COOKS], COOK_PROFIT, cooks_recipe);
+        spawnProducers(workers_quantities[CARPENTERS], CARPENTER_PROFIT,
                        carpenters_recipe);
-        spawnProducers(workers_config.getBlacksmiths(), BLACKSMITH_PROFIT,
+        spawnProducers(workers_quantities[BLACKSMITHS], BLACKSMITH_PROFIT,
                        blacksmiths_recipe);
     } catch(const Exception& e) {
         throw e;
@@ -109,7 +109,9 @@ void Game::freeThreads(const int &n, std::vector<Thread*>& threads) {
 void Game::distributeResources() {
     try {
         Resource r;
-        while ((r = map.popResource())) {
+        // while ((r = map.popResource())) {
+        map >> r;
+        while (r != INVALID) {
             switch (r) {
                 case WHEAT:
                     farmers_source.push(r);
@@ -129,6 +131,7 @@ void Game::distributeResources() {
                         "Función: Game::distributeResources()"));
                     break;
             }
+            map >> r;
         }
     } catch(const Exception& e) {
         throw e;
@@ -144,14 +147,14 @@ void Game::closeResourceQueues() {
 
 
 void Game::printResults() {
-    std::cout << "Recursos restantes:\n";
-    std::cout << "  - Trigo: "<< inventory[WHEAT] << "\n";
-    std::cout << "  - Madera: "<< inventory[WOOD] << "\n";
-    std::cout << "  - Carbon: "<< inventory[COAL] << "\n";
-    std::cout << "  - Hierro: "<< inventory[IRON] << "\n\n";
-
+    std::cout << "Recursos restantes:" << std::endl;
+    std::cout << "  - Trigo: "<< inventory[WHEAT] << std::endl;
+    std::cout << "  - Madera: "<< inventory[WOOD] << std::endl;
+    std::cout << "  - Carbon: "<< inventory[COAL] << std::endl;
+    std::cout << "  - Hierro: "<< inventory[IRON] << std::endl;
+    std::cout << std::endl;
     std::cout << "Puntos de Beneficio acumulados: ";
-    std::cout << points.getValue() << "\n";
+    std::cout << points.getValue() << std::endl;
 }
 
 
