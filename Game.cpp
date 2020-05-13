@@ -144,14 +144,14 @@ void Game::closeResourceQueues() {
 
 
 void Game::printResults() {
-    std::cout << "Recursos restantes:\n";
-    std::cout << "  - Trigo: "<< inventory[WHEAT] << "\n";
-    std::cout << "  - Madera: "<< inventory[WOOD] << "\n";
-    std::cout << "  - Carbon: "<< inventory[COAL] << "\n";
-    std::cout << "  - Hierro: "<< inventory[IRON] << "\n\n";
-
+    std::cout << "Recursos restantes:" << std::endl;
+    std::cout << "  - Trigo: "<< inventory[WHEAT] << std::endl;
+    std::cout << "  - Madera: "<< inventory[WOOD] << std::endl;
+    std::cout << "  - Carbon: "<< inventory[COAL] << std::endl;
+    std::cout << "  - Hierro: "<< inventory[IRON] << std::endl;
+    std::cout << std::endl;
     std::cout << "Puntos de Beneficio acumulados: ";
-    std::cout << points.getValue() << "\n";
+    std::cout << points.getValue() << std::endl;
 }
 
 
