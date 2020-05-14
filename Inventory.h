@@ -61,9 +61,13 @@ class InventoryProtected {
 
         /** 
          * Deshabilitamos el constructor por copia y su operador.
+         * Deshabilitamos el constructor por movimiento y su operador (los
+         * mutex son inamovibles).
         */
         InventoryProtected(const InventoryProtected&) = delete;
         InventoryProtected& operator=(const InventoryProtected&) = delete;
+        InventoryProtected(InventoryProtected&& other) = delete;
+        InventoryProtected& operator=(InventoryProtected&& other) = delete;
 
 
         /** 

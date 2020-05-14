@@ -133,12 +133,16 @@ class Game {
         */
         Game(std::string workers_path, std::string map_path);
 
-
+        
         /** 
          * Deshabilitamos el constructor por copia y su operador.
+         * Deshabilitamos el constructor por movimiento y su operador (los
+         * mutex son inamovibles).
         */
         Game(const Game&) = delete;
         Game& operator=(const Game&) = delete;
+        Game(Game&& other) = delete;
+        Game& operator=(Game&& other) = delete;
 
 
         /** 

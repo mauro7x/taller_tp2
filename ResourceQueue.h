@@ -44,9 +44,13 @@ class ResourceQueue {
 
         /** 
          * Deshabilitamos el constructor por copia y su operador.
+         * Deshabilitamos el constructor por movimiento y su operador (los
+         * mutex son inamovibles).
         */
         ResourceQueue(const ResourceQueue&) = delete;
         ResourceQueue& operator=(const ResourceQueue&) = delete;
+        ResourceQueue(ResourceQueue&& other) = delete;
+        ResourceQueue& operator=(ResourceQueue&& other) = delete;
         
 
         /** 

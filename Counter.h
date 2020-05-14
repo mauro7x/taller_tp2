@@ -29,10 +29,13 @@ class CounterProtected {
 
         /** 
          * Deshabilitamos el constructor por copia y su operador.
+         * Deshabilitamos el constructor por movimiento y su operador (los
+         * mutex son inamovibles).
         */
         CounterProtected(const CounterProtected&) = delete;
         CounterProtected& operator=(const CounterProtected&) = delete;
-
+        CounterProtected(CounterProtected&& other) = delete;
+        CounterProtected& operator=(CounterProtected&& other) = delete;
 
         /** 
          * Descripcion: sobrecarga el operador += para incrementar el valor.
