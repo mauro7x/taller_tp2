@@ -9,22 +9,14 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Métodos privados
 
-WorkersConfig::WorkersConfig(const std::string filepath) {
-    try {
-        parseFile(filepath);
-    } catch(const Exception& e) {
-        throw e;
-    }
-}
-
-
-void WorkersConfig::parseFile(const std::string filepath) {
+void WorkersConfig::_parseFile(const std::string filepath) {
     std::ifstream config_file;
     config_file.open(filepath);
     if (!config_file.is_open()) {
         throw(Exception(INPUT_ERROR, "Error: no se pudo abrir el archivo. "
-                        "Función: WorkersConfig::parseFile()."));
+                        "Función: WorkersConfig::_parseFile()."));
     }
 
     std::string worker_type;
@@ -32,7 +24,7 @@ void WorkersConfig::parseFile(const std::string filepath) {
     while (std::getline(config_file, worker_type, '=')) {
         std::getline(config_file, worker_n);
         try{
-            setWorkerQuantity(worker_type, worker_n);
+            _setWorkerQuantity(worker_type, worker_n);
         } catch(const Exception& e) {
             config_file.close();
             throw e;
@@ -40,44 +32,56 @@ void WorkersConfig::parseFile(const std::string filepath) {
     }
 
     config_file.close();
-    if (!areAllValuesSet()) {
+    if (!_areAllValuesSet()) {
         throw(Exception(INPUT_ERROR, "Error: archivo incompleto. "
-                        "Función: WorkersConfig::parseFile()."));
+                        "Función: WorkersConfig::_parseFile()."));
     }
 }
 
 
-void WorkersConfig::setWorkerQuantity(const std::string worker,
+void WorkersConfig::_setWorkerQuantity(const std::string worker,
                                       const std::string quantity) {
-    if (!isValueValid(worker)) {
+    if (!_isValueValid(worker)) {
         throw(Exception(INPUT_ERROR, "Error: input desconocido. "
-                        "Función: WorkersConfig::setWorkerQuantity()."));
+                        "Función: WorkersConfig::_setWorkerQuantity()."));
     }
 
-    if (isValueSet(worker)) {
+    if (_isValueSet(worker)) {
         throw(Exception(INPUT_ERROR, "Error: trabajador repetido. "
-                        "Función: WorkersConfig::setWorkerQuantity()"));
+                        "Función: WorkersConfig::_setWorkerQuantity()"));
     }
 
     quantities[worker] = std::stoi(quantity);
 }
 
 
-bool WorkersConfig::isValueValid(const std::string value) const {
+bool WorkersConfig::_isValueValid(const std::string value) const {
     return(value == FARMERS || value == LUMBERJACKS || value == MINERS ||
            value == COOKS || value == CARPENTERS || value == BLACKSMITHS);
 }
 
 
-bool WorkersConfig::isValueSet(const std::string value) const {
+bool WorkersConfig::_isValueSet(const std::string value) const {
     return (quantities.count(value) > 0);
 }
 
 
-bool WorkersConfig::areAllValuesSet() const {
-    return (isValueSet(FARMERS) && isValueSet(LUMBERJACKS) &&
-            isValueSet(MINERS) && isValueSet(COOKS) &&
-            isValueSet(CARPENTERS) && isValueSet(BLACKSMITHS));
+bool WorkersConfig::_areAllValuesSet() const {
+    return (_isValueSet(FARMERS) && _isValueSet(LUMBERJACKS) &&
+            _isValueSet(MINERS) && _isValueSet(COOKS) &&
+            _isValueSet(CARPENTERS) && _isValueSet(BLACKSMITHS));
+}
+
+
+//-----------------------------------------------------------------------------
+// API Pública
+
+WorkersConfig::WorkersConfig(const std::string filepath) {
+    try {
+        _parseFile(filepath);
+    } catch(const Exception& e) {
+        throw e;
+    }
 }
 
 

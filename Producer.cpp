@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// API Pública
 
 Producer::Producer(InventoryProtected &inventory, CounterProtected &points,
                    const int profitForProducing, const Recipe& recipe) : 

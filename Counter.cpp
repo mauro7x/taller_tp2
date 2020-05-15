@@ -1,6 +1,7 @@
 #include "Counter.h"
 
 //-----------------------------------------------------------------------------
+// API Pública
 
 CounterProtected::CounterProtected() : value(0) {}
 

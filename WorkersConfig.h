@@ -31,7 +31,7 @@ class WorkersConfig {
          * Parametros: ruta constante al archivo.
          * Retorno: -
         */
-        void parseFile(const std::string filepath);
+        void _parseFile(const std::string filepath);
 
 
         /** 
@@ -40,7 +40,7 @@ class WorkersConfig {
          * Parametros: worker y cantidad del mismo.
          * Retorno: -
         */
-        void setWorkerQuantity(const std::string worker,
+        void _setWorkerQuantity(const std::string worker,
                                const std::string quantity);
 
 
@@ -49,7 +49,7 @@ class WorkersConfig {
          * Parametros: valor a chequear.
          * Retorno: TRUE si es válido, FALSE si no.
         */
-        bool isValueValid(const std::string value) const;
+        bool _isValueValid(const std::string value) const;
 
 
         /** 
@@ -57,7 +57,7 @@ class WorkersConfig {
          * Parametros: valor a chequear.
          * Retorno: TRUE si está seteado, FALSE si no.
         */
-        bool isValueSet(const std::string value) const;
+        bool _isValueSet(const std::string value) const;
 
 
         /** 
@@ -65,7 +65,7 @@ class WorkersConfig {
          * Parametros: -
          * Retorno: TRUE si fueron seteados, FALSE si no.
         */
-        bool areAllValuesSet() const;
+        bool _areAllValuesSet() const;
 
     public:
         /** 

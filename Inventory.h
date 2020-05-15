@@ -38,7 +38,7 @@ class InventoryProtected {
          * ACLARACIÓN: No toma el MUTEX pues no pertenece a la API, y se
          * lo llama sólo desde un método que SÍ toma el MUTEX.
         */
-        bool haveEnoughResources(const Recipe& recipe) const;
+        bool _haveEnoughResources(const Recipe& recipe) const;
 
 
         /** 
@@ -49,7 +49,7 @@ class InventoryProtected {
          * ACLARACIÓN: No toma el MUTEX pues no pertenece a la API, y se
          * lo llama sólo desde un método que SÍ toma el MUTEX.
         */
-        void removeResources(const Recipe& recipe);
+        void _removeResources(const Recipe& recipe);
 
     public:
         /** 

@@ -20,21 +20,9 @@
 
 
 //-----------------------------------------------------------------------------
+// Métodos privados
 
-Game::Game(std::string workers_path, std::string map_path) :
-           workers_quantities(workers_path), map(map_path) {
-    this->total_gatherers = workers_quantities.getTotalGatherers();
-    this->total_producers = workers_quantities.getTotalProducers();
-    gatherers.reserve(total_gatherers);
-    producers.reserve(total_producers);
-
-    cooks_recipe.insert(COOK_RECIPE);
-    carpenters_recipe.insert(CARPENTER_RECIPE);
-    blacksmiths_recipe.insert(BLACKSMITH_RECIPE);
-}
-
-
-void Game::spawnGatherers(const int &n, ResourceQueue& source) {
+void Game::_spawnGatherers(const int &n, ResourceQueue& source) {
     for (int i = 0; i < n; i++) {
         Gatherer* ptr = new Gatherer(inventory, source);
         if (ptr == NULL) {
@@ -46,7 +34,7 @@ void Game::spawnGatherers(const int &n, ResourceQueue& source) {
 }
 
 
-void Game::spawnProducers(const int &n, int profitForProducing,
+void Game::_spawnProducers(const int &n, int profitForProducing,
                           const Recipe& recipe) {
     for (int i = 0; i < n; i++) {
         Producer* ptr = new Producer(inventory, points, profitForProducing,
@@ -60,16 +48,16 @@ void Game::spawnProducers(const int &n, int profitForProducing,
 }
 
 
-void Game::spawnWorkers() {
+void Game::_spawnWorkers() {
     try {
-        spawnGatherers(workers_quantities[FARMERS], farmers_source);
-        spawnGatherers(workers_quantities[LUMBERJACKS], lumberjacks_source);
-        spawnGatherers(workers_quantities[MINERS], miners_source);
+        _spawnGatherers(workers_quantities[FARMERS], farmers_source);
+        _spawnGatherers(workers_quantities[LUMBERJACKS], lumberjacks_source);
+        _spawnGatherers(workers_quantities[MINERS], miners_source);
 
-        spawnProducers(workers_quantities[COOKS], COOK_PROFIT, cooks_recipe);
-        spawnProducers(workers_quantities[CARPENTERS], CARPENTER_PROFIT,
+        _spawnProducers(workers_quantities[COOKS], COOK_PROFIT, cooks_recipe);
+        _spawnProducers(workers_quantities[CARPENTERS], CARPENTER_PROFIT,
                        carpenters_recipe);
-        spawnProducers(workers_quantities[BLACKSMITHS], BLACKSMITH_PROFIT,
+        _spawnProducers(workers_quantities[BLACKSMITHS], BLACKSMITH_PROFIT,
                        blacksmiths_recipe);
     } catch(const Exception& e) {
         throw e;
@@ -77,7 +65,7 @@ void Game::spawnWorkers() {
 }
 
 
-void Game::startThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_startThreads(const int &n, std::vector<Thread*>& threads) {
     for (int i = 0; i < n; i++) {
         if (threads[i] == NULL) {
             throw(Exception(UNEXPECTED_NULL, "Error: nulo inesperado. "
@@ -88,7 +76,7 @@ void Game::startThreads(const int &n, std::vector<Thread*>& threads) {
 }
 
 
-void Game::joinThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_joinThreads(const int &n, std::vector<Thread*>& threads) {
     for (int i = 0; i < n; i++) {
         if (threads[i] != NULL) {
             threads[i]->join();
@@ -97,7 +85,7 @@ void Game::joinThreads(const int &n, std::vector<Thread*>& threads) {
 }
 
 
-void Game::freeThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_freeThreads(const int &n, std::vector<Thread*>& threads) {
     for (int i = 0; i < n; i++) {
         if (threads[i] != NULL) {
             delete threads[i];
@@ -106,7 +94,7 @@ void Game::freeThreads(const int &n, std::vector<Thread*>& threads) {
 }
 
 
-void Game::distributeResources() {
+void Game::_distributeResources() {
     try {
         Resource r;
         // while ((r = map.popResource())) {
@@ -139,14 +127,14 @@ void Game::distributeResources() {
 }
 
 
-void Game::closeResourceQueues() {
+void Game::_closeResourceQueues() {
     farmers_source.close();
     lumberjacks_source.close();
     miners_source.close();
 }
 
 
-void Game::printResults() {
+void Game::_printResults() {
     std::cout << "Recursos restantes:" << std::endl;
     std::cout << "  - Trigo: "<< inventory[WHEAT] << std::endl;
     std::cout << "  - Madera: "<< inventory[WOOD] << std::endl;
@@ -158,45 +146,61 @@ void Game::printResults() {
 }
 
 
-void Game::forceFinish() {
-    closeResourceQueues();
-    joinThreads(total_gatherers, gatherers);
+void Game::_forceFinish() {
+    _closeResourceQueues();
+    _joinThreads(total_gatherers, gatherers);
     inventory.close();
-    joinThreads(total_producers, producers);
+    _joinThreads(total_producers, producers);
+}
+
+
+//-----------------------------------------------------------------------------
+// API Pública
+
+Game::Game(std::string workers_path, std::string map_path) :
+           workers_quantities(workers_path), map(map_path) {
+    this->total_gatherers = workers_quantities.getTotalGatherers();
+    this->total_producers = workers_quantities.getTotalProducers();
+    gatherers.reserve(total_gatherers);
+    producers.reserve(total_producers);
+
+    cooks_recipe.insert(COOK_RECIPE);
+    carpenters_recipe.insert(CARPENTER_RECIPE);
+    blacksmiths_recipe.insert(BLACKSMITH_RECIPE);
 }
 
 
 void Game::run() { // main thread
     try {
         // Spawneamos a los workers y los ponemos a correr
-        spawnWorkers();
-        startThreads(total_gatherers, gatherers);
-        startThreads(total_producers, producers);
+        _spawnWorkers();
+        _startThreads(total_gatherers, gatherers);
+        _startThreads(total_producers, producers);
 
         // Repartimos los recursos y luego cerramos las fuentes
-        distributeResources();
-        closeResourceQueues();
+        _distributeResources();
+        _closeResourceQueues();
 
         // Esperamos que terminen los recolectores
-        joinThreads(total_gatherers, gatherers);
+        _joinThreads(total_gatherers, gatherers);
 
         // Cerramos el inventario para que terminen los productores
         inventory.close();
 
         // Esperamos que terminen los productores y salimos
-        joinThreads(total_producers, producers);
+        _joinThreads(total_producers, producers);
     } catch(const Exception& e) {
-        forceFinish();
+        _forceFinish();
         throw e;
     }
 
-    printResults();
+    _printResults();
 }
 
 
 Game::~Game() {
-    freeThreads(total_gatherers, gatherers);
-    freeThreads(total_producers, producers);
+    _freeThreads(total_gatherers, gatherers);
+    _freeThreads(total_producers, producers);
 }
 
 //-----------------------------------------------------------------------------

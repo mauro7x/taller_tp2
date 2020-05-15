@@ -41,7 +41,7 @@ class Game {
          * Parametros: -
          * Retorno: -
         */
-        void spawnWorkers();
+        void _spawnWorkers();
 
 
         /** 
@@ -51,7 +51,7 @@ class Game {
          * cola de recursos que deberá pasarse al recolector.
          * Retorno: -
         */
-        void spawnGatherers(const int &n, ResourceQueue& source);
+        void _spawnGatherers(const int &n, ResourceQueue& source);
 
         
         /** 
@@ -61,7 +61,7 @@ class Game {
          * productor por producir, referencia a receta constante.
          * Retorno: -
         */
-        void spawnProducers(const int &n, int profitForProducing,
+        void _spawnProducers(const int &n, int profitForProducing,
                             const Recipe& recipe);
 
 
@@ -71,7 +71,7 @@ class Game {
          * por referencia.
          * Retorno: -
         */
-        void startThreads(const int &n, std::vector<Thread*>& threads);
+        void _startThreads(const int &n, std::vector<Thread*>& threads);
 
 
         /** 
@@ -79,7 +79,7 @@ class Game {
          * Parametros: cantidad de threads, vector de threads por referencia.
          * Retorno: -
         */
-        void joinThreads(const int &n, std::vector<Thread*>& threads);
+        void _joinThreads(const int &n, std::vector<Thread*>& threads);
 
 
         /** 
@@ -87,7 +87,7 @@ class Game {
          * Parametros: cantidad de threads, vector de threads por referencia.
          * Retorno: -
         */
-        void freeThreads(const int &n, std::vector<Thread*>& threads);
+        void _freeThreads(const int &n, std::vector<Thread*>& threads);
 
 
         /** 
@@ -96,7 +96,7 @@ class Game {
          * Parametros: -
          * Retorno: -
         */
-        void distributeResources();
+        void _distributeResources();
 
 
         /** 
@@ -104,7 +104,7 @@ class Game {
          * Parametros: -
          * Retorno: -
         */
-        void closeResourceQueues();
+        void _closeResourceQueues();
 
 
         /** 
@@ -113,7 +113,7 @@ class Game {
          * Parametros: -
          * Retorno: -
         */
-        void forceFinish();
+        void _forceFinish();
 
 
         /** 
@@ -121,7 +121,7 @@ class Game {
          * Parametros: -
          * Retorno: -
         */
-        void printResults();
+        void _printResults();
 
     public:
         /** 

@@ -7,6 +7,26 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// Métodos privados
+
+bool InventoryProtected::_haveEnoughResources(const Recipe& recipe) const {
+    return ((inventory.at(WHEAT) >= recipe.at(WHEAT)) &&
+            (inventory.at(WOOD) >= recipe.at(WOOD)) &&
+            (inventory.at(IRON) >= recipe.at(IRON)) &&
+            (inventory.at(COAL) >= recipe.at(COAL)));
+}
+
+
+void InventoryProtected::_removeResources(const Recipe& recipe) {
+    inventory[WHEAT] -= recipe.at(WHEAT);
+    inventory[WOOD] -= recipe.at(WOOD);
+    inventory[IRON] -= recipe.at(IRON);
+    inventory[COAL] -= recipe.at(COAL);
+}
+
+
+//-----------------------------------------------------------------------------
+// API Pública
 
 InventoryProtected::InventoryProtected() : permamently_closed(false) {
     inventory.insert({{WOOD, 0}, {WHEAT, 0}, {COAL, 0}, {IRON, 0}});
@@ -20,26 +40,10 @@ void InventoryProtected::addResource(const Resource& resource) {
 }
 
 
-bool InventoryProtected::haveEnoughResources(const Recipe& recipe) const {
-    return ((inventory.at(WHEAT) >= recipe.at(WHEAT)) &&
-            (inventory.at(WOOD) >= recipe.at(WOOD)) &&
-            (inventory.at(IRON) >= recipe.at(IRON)) &&
-            (inventory.at(COAL) >= recipe.at(COAL)));
-}
-
-
-void InventoryProtected::removeResources(const Recipe& recipe) {
-    inventory[WHEAT] -= recipe.at(WHEAT);
-    inventory[WOOD] -= recipe.at(WOOD);
-    inventory[IRON] -= recipe.at(IRON);
-    inventory[COAL] -= recipe.at(COAL);
-}
-
-
 bool InventoryProtected::getResourcesToProduce(const Recipe& recipe) {
     std::unique_lock<std::mutex> l(m);
     
-    while (!haveEnoughResources(recipe)) {
+    while (!_haveEnoughResources(recipe)) {
         if (permamently_closed) {
             return false;
         }
@@ -47,7 +51,7 @@ bool InventoryProtected::getResourcesToProduce(const Recipe& recipe) {
         cv.wait(l);
     }
 
-    removeResources(recipe);
+    _removeResources(recipe);
     return true;
 }
 

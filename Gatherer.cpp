@@ -11,6 +11,7 @@
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
+// API Pública
 
 Gatherer::Gatherer(InventoryProtected &inventory, ResourceQueue& source) :
                    inventory(inventory), source(source) {}
