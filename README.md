@@ -28,6 +28,8 @@
 3. [Resolución](#resolucion)
     * [Primera etapa: conceptos necesarios](#uno)
     * [Segunda etapa: abstracciones útiles](#dos)
+        * [Objetos activos: Thread](#thread)
+        * [Recursos compartidos: Monitor](#monitor)
     * [Tercera etapa: análisis del problema y detección de instancias](#tres)
     * [Cuarta etapa: diseño del modelo](#cuatro)
     * [Quinta etapa: manejo de errores](#cinco)
@@ -192,13 +194,13 @@ Estos dos mecanismos son **esenciales** en el desarrollo de la programación **m
 
 Entendidos los conceptos, me predispuse a extraer **abstracciones** útiles de los mismos, aprovechando ejemplos que habíamos visto en clase o en internet. 
 
-### Objetos activos (`Thread`)
+### Objetos activos (`Thread`) <a name="thread"></a>
 
 La primer abstracción extraída y que será importante es la de **objetos activos**. Los objetos activos son aquellos que **corren en su propio hilo de ejecución**. Esto se logra haciendo que su clase lanze un `thread`, con un método al que llamaremos `run()` que se ejecutará en el hilo.
 
 Para lograr encapsulamiento y mayor legibilidad, generamos nuestra clase `Thread` que se encarga de lanzar el método `run()` en un hilo, y de proporcionar la interfaz necesaria para la interacción con el hilo (poder hacerle *start* al hilo, así como poder *joinearlo*). Diremos entonces que todas las clases que hereden de `Thread` serán **objetos activos**.
 
-### Recursos compartidos (`Monitor`)
+### Recursos compartidos (`Monitor`) <a name="monitor"></a>
 
 Como se explicó anteriormente, cuando se programa con varios hilos de ejecución hay que tener especial cuidado con los **recursos compartidos** ya que estos deben tener un mecanismo de evitar que dos hilos lo quieran modificar simultáneamente.
 
@@ -246,7 +248,7 @@ Propongo entonces el siguiente *plan de ejecución*:
 
 4) Se utiliza una clase `MapParser` para procesar el mapa y obtener sus recursos, y mientras se los obtiene se los distribuye entre las distintas **colas bloqueantes de recursos**.
 
-5) Se **cierran** las colas de recursos para que los recolectores **finalicen su ejecución**, se *joinea* a los mismos.
+5) Cuando ya no hay recursos en el mapa, se **cierran** las colas de recursos para que los recolectores **finalicen su ejecución**, se *joinea* a los mismos.
 
 6) Una vez que los recolectores terminan, se **cierra el inventario**, para indicarle a los productores que **ya no llegarán recursos nuevos**.
 
@@ -264,7 +266,7 @@ En una sección posterior ([Detalles de implementación](#detalles)) se explicar
 
 Llegado este punto, es momento de **escribir el código** que le de sentido a nuestro diseño. Esto no debería ser una tarea difícil, ya que hemos decidido exactamente qué haremos y cómo lo haremos, y nos hemos tomado el tiempo de **familiarizarnos con las herramientas** que tenemos a nuestra disposición, y cuándo es conveniente utilizarlas.
 
-En la sección [Detalles de implementación](#detalles) explicaré con detalle qué clases diseñe finalmente y la responsabilidad de cada una de ellas, ya que justamente son sólo detalles de implementación y no forman parte del modelo que ya describí.
+En la sección [Modelo final](#final) explicaré con detalle qué clases diseñe finalmente y la responsabilidad de cada una de ellas.
 
 ## Séptima etapa: testeo y debugging <a name="siete"></a>
 
@@ -278,15 +280,120 @@ Finalmente, entré en esta etapa de **refactor** en la que se busca mejorar part
 
 Para terminar, me aseguré de que cada parte del código este **documentada correctamente** y que sea fácilmente legible, así como de que las responsabilidades sean claras. Una vez logrado esto, **dí por finalizado el trabajo** y me predispuse a escribir el informe del mismo.
 
+<hr>
 
+# Modelo final <a name="final"></a>
 
+En esta sección detallaré cada una de las clases que componen mi **modelo final**, dejando en claro la **motivación inicial** para su diseño, su **responsabilidad** y su **rol** en el ejercicio resuelto.
 
+## Procesadores de archivos de entrada
+
+Para **procesar los archivos de entrada**, diseñé dos clases específicas, una para cada uno de los archivos:
+
+- `WorkersConfig`: clase que se encarga de parsear el archivo de configuración de los trabajadores. Se utiliza para encapsular este parseo, y que el hilo principal simplemente lo instancie y lo utilice preguntándole cuántos agricultores debe generar, cuántos leñadores, etc.
+    * **Implementación**: utiliza un `unordered_map` debido a que este está implementado como un HashMap y es *O(1)* para el acceso, por lo que resulta muy eficiente utilizarlo. Se sobrecarga el operador `operator[]` para el acceso a las cantidades, para lograr mayor legibilidad y evitar tener tantos *getters* como tipos de trabajadores hayan en el ejercicio.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+- `MapParser`: clase que se encarga de parsear el archivo del mapa. El hilo principal sólo debe instanciarlo y utilizar su método pop para ir obteniendo los recursos uno a uno.
+    * **Implementación**: se utiliza nuevamente un `unordered_map` para el mappeo desde el caracter leído hacia el `Recurso`. Se sobrecarga el operador `operator>>` para el pop, a razón de dar legibilidad (podemos ejecutar: `map >> resource;`). Un detalle es que se elige procesar los recursos uno a uno a medida que el hilo principal los pida, con el objetivo de que los recursos se inserten en las colas apenas estén disponibles.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Objetos activos
+
+Para los **objetos activos** *(como se explicó previamente, esto significa que corren en su propio hilo de ejecución)*, diseñe clases que hereden de la clase `Thread`, y estas son: `Gatherer` como abstracción para los recolectores, y`Producer` como abstracción para los productores. Procedo a detallarlas:
+
+- `Thread`: clase abstracta de la que deben heredar los objetos activos a diseñar. Deben sobrecargar el método `run()` que será el que se ejecute cuando se lance el hilo.
+    * **Implementación**: tiene como atributo un `std::thread` que se instancia (y lanza) con el método `start()`.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+- `Gatherer`: abstracción para los recolectores. Heredan de `Thread`, corren en su propio hilo, y en su ejecución se dedican a intentar extraer recursos de la cola que les fue asignada, y agregarlos al inventario que les fue asignado.
+    * **Implementación**: se implementa el polimorfismo utilizando **inyección de dependencias**, para evitar tener que crear muchas clases para cada recolector que al fin y al cabo hacen lo mismo: extraer recursos de una cola y ponerlos en un inventario. Para eso, en la instanciación, **se recibe por referencia la cola de recursos correspondiente**, por lo que el creador deberá ser el que se encargue de pasarle la cola que le corresponda.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+- `Producer`: similar a `Gatherer` pero para productores. En su ejecución, intentan obtener los recursos del inventario para construir la receta que les fue asigniada, y si lo consiguen suman los puntos al contador general.
+    * **Implementación**: al igual que para `Gatherer`, se utiliza inyección de dependencias para indicarle a cada productor cuál es la **receta** que deben intentar construir.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Recursos y recetas
+
+La implementación de los **recursos** y de las **recetas** fue algo que me llevó tiempo decidir, puesto que en un principio los veía como objetos, pero luego me di cuenta que no había comportamiento asociado y que para la implementación de este ejercicio me bastaba con definir los recursos utilizando un `enum`, y a las recetas utilizando `unordered_map`s que indiquen la cantidad de cada recurso a utilizar. 
+
+Sin embargo, decidí encapsular esta decisión en los archivos `Resources.h` y `Recipes.h` para que si fuera necesario cambiarlo, no sea necesario cambiar todo el trabajo.
+
+## Colas bloqueantes de recursos
+
+Para las **colas de recursos** también tuve una diyuntiva en la decisión: en un principio comencé por utilizar **templates**, es decir, armar una plantilla para una **cola genérica**. Esta decisión sólo tenía un aspecto que no me terminaba de cerrar, y es que cuando la cola estaba vacía era necesario lanzar una **excepción** para indicarle al recolector que no sólo no habían recursos, si no que ya nunca los habría. Esto se podía evitar manejando una cola de punteros a objetos, pero preferí evitar esto para no utilizar memoria dinámica.
+
+Frente a esto, decidí quedarme con la implementación **tradicional**: una cola bloqueante **de recursos**, es decir, no hacerla genérica. Lo que me permite esta alternativa es devolver un **valor especial** de **recurso** que indica que ya no hay recursos.
+
+- `ResourceQueue`: implementación de una cola bloqueante de `Resources`. Utiliza `condition_variables` para notificar a los recolectores que hay nuevos recursos o de que se cerró la cola.
+    * **Implementación**: contiene una `std::queue`, una `std::condition_variable`, y un `std::mutex` para sincronizar el acceso a las colas, puesto que como se explicó anteriormente, se trata de un **recurso compartido**.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Inventario
+
+Este es quizás el punto de **mayor complejidad** del ejercicio. Mientras pensaba como encararlo, se me ocurrieron dos alternativas, pero finalmente decanté por una de ellas en parte porque en el enunciado lo sugieren y en parte porque genera código mucho más legible. Estas alternativas eran:
+
+1. Diseñar un inventario que tenga una `condition_variable` por cada tipo de productor, por lo que no sería necesario que cada vez que alguien agrega un recurso, se despierten **todos** los productores para chequear si lo que se agregó al inventario les permite completar su receta.
+    * **Ventajas**: mayor eficiencia en el manejo de los hilos, no se despiertan hilos porque sí.
+    * **Desventajas**: se requiere lógica extra para despertar a los hilos correctos, perdiendo legibilidad y simpleza en la solución.
+
+2. Diseñar un inventario que tenga sólo una `condition_variable`, y que cada vez que llegue un nuevo recurso se notifique a todos los productores y sean ellos los que se fijan si pueden o no construir sus recetas. 
+    * **Ventajas**: solución MUY simple, agrega mucha legibilidad y es fácilmente debuggeable, no requiere lógica extra y se implementa en pocas lineas de código.
+    * **Desventajas**: es ineficiente si se piensa en extender el código, pues si tuvieramos cientos de productores para miles de recursos posibles, se perdería mucho tiempo verificando condiciones que en realidad no han cambiado.
+
+Considero que para la extensión de este ejercicio es una buena idea quedarse con la segunda alternativa para **ganar simpleza y legibilidad**.
+
+- `InventoryProtected`: **recurso compartido** entre todos los hilos participantes del ejercicio, donde los recolectores almacenan los recursos y de donde los productores retiran recursos para fabricar sus respectivas recetas.
+    * **Implementación**: se implementa utilizando un `unordered_map` donde se cuenta la cantidad de cada tipo de recurso que hay en cada momento. Se utiliza una `condition_variable` como se explicó previamente en conjunto con un `mutex` para proteger el acceso.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Contador de puntos de beneficio
+
+El contador de puntos es otro de los **recursos compartidos**, por lo que simplemente implementamos la abstracción descripta anteriormente: creamos un [monitor](#monitor).
+
+- `CounterProtected`: monitor para los puntos de beneficio. Es compartido por los productores.
+    * **Implementación**: como todo monitor, cuenta con el recurso a compartir *(en este caso un contador)* y con un `mutex`.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Excepciones
+
+Para el manejo de errores, como se describirá en una [sección posterior](#errores), decidí crear la siguiente clase:
+
+- `Exception`: abstracción que permite agregarle un **código de retorno** a una `std::exception`, para poder terminar la ejecución con códigos de error personalizados.
+
+*(Su comportamiento se describe de manera más detallada en la sección marcada).*
+
+## Organizador de la ejecución
+
+Finalmente, es necesario diseñar una clase que se encargue de **organizar** la correcta ejecución del juego, incluyendo las instanciaciones, asignaciones, lógica de inyección de dependencias, etc. En pocas palabras, es el que debe ejecutar al pie de la letra el [**plan de ejecución**](#cuatro) descripto anteriormente, utilizando **RAII** para el almacenamiento de las variables pertinentes y evitando utilizar el **heap**.
+
+Su creación permite, además, encapsular el comportamiento del juego evitando que exista lógica de la aplicación en el `main` y generando código mucho más legible.
+
+- `Game`: organizador, se encarga de realizar las acciones necesarias para llevar a cabo el plan de ejecución descripto anteriormente.
+    * **Implementación**: contiene un `WorkerConfig`, un `MapParser`, un `InventoryProtected`, un `CounterProtected`, tres `ResourceQueue`s *(una para cada tipo de recolector)*, tres `Recipe`s *(una para cada tipo de  productor)* y finalmente dos arreglos de `Threads`: uno para los `Producer`s, y otro para los `Gatherer`s.
+    * **Diagrama de clase**:
+    // insertar diagrama
+
+## Diagrama final
+
+Se llega a partir del diseño de las clases detalladas, al siguiente **diagrama final**:
+
+// diagrama final
 
 <hr>
 
 # Detalles de implementación <a name="detalles"></a>
 
-## Manejo de errores (1/2)
+## Manejo de errores (1/2) <a name="errores"></a>
 
 Para mi implementación, decidí vincular los **errores** a distintos **códigos de retorno**, y para esto diseñe una clase `Exception` que hereda de `std::exception` con el objetivo de poder agregarle como atributo el código mencionado a cada excepción. Esta clase me permitirá lanzar mensajes de error y códigos específicos para cada situación que se presente, como podrían ser las siguientes:
 
@@ -296,7 +403,7 @@ Para mi implementación, decidí vincular los **errores** a distintos **códigos
 
 Y todos los errores que puedan ir surgiendo a medida que desarrollo las clases, podrán ser agregados a esta lista y devolver un código de error particular.
 
-## Códigos de retorno (2/2)
+## Códigos de retorno (2/2) <a name="retorno"></a>
 
 Siguiendo con el tema descripto en la sección previa, adjunto la tabla que indica los **códigos de retorno utilizados**:
 
