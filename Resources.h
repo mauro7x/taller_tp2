@@ -21,7 +21,8 @@
  * búcles con condicion de corte: while (resource) {...}, ya que cuando resource
  * sea invalido, el while terminará.
 */
-enum Resource {INVALID, WHEAT, WOOD, IRON, COAL};
+typedef int Resource;
+enum Resources {INVALID, WHEAT, WOOD, IRON, COAL};
 
 //-----------------------------------------------------------------------------
 #endif // __RESOURCES_H__
