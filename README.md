@@ -290,15 +290,24 @@ En esta sección detallaré cada una de las clases que componen mi **modelo fina
 
 Para **procesar los archivos de entrada**, diseñé dos clases específicas, una para cada uno de los archivos:
 
+| Clase | Descripción | Implementación | Diagrama |
+|-------|-------------|----------------|----------|
+| WorkersConfig | Clase que se encarga de parsear el archivo de configuración de los trabajadores. Se utiliza para encapsular este parseo, y que el hilo principal simplemente lo instancie y lo utilice preguntándole cuántos agricultores debe generar, cuántos leñadores, etc. | Utiliza un `unordered_map` debido a que este está implementado como un HashMap y es *O(1)* para el acceso, por lo que resulta muy eficiente utilizarlo. Se sobrecarga el operador `operator[]` para el acceso a las cantidades, para lograr mayor legibilidad y evitar tener tantos *getters* como tipos de trabajadores hayan en el ejercicio. | ![workers](img/clases/workers.png) |
+
+
 - `WorkersConfig`: clase que se encarga de parsear el archivo de configuración de los trabajadores. Se utiliza para encapsular este parseo, y que el hilo principal simplemente lo instancie y lo utilice preguntándole cuántos agricultores debe generar, cuántos leñadores, etc.
     * **Implementación**: utiliza un `unordered_map` debido a que este está implementado como un HashMap y es *O(1)* para el acceso, por lo que resulta muy eficiente utilizarlo. Se sobrecarga el operador `operator[]` para el acceso a las cantidades, para lograr mayor legibilidad y evitar tener tantos *getters* como tipos de trabajadores hayan en el ejercicio.
-    * **Diagrama de clase**:
-    // insertar diagrama
+
+| ![workers](img/clases/workers.png) |
+|:--:|
+| *Diagrama de clase **WorkersConfig*** |
 
 - `MapParser`: clase que se encarga de parsear el archivo del mapa. El hilo principal sólo debe instanciarlo y utilizar su método pop para ir obteniendo los recursos uno a uno.
     * **Implementación**: se utiliza nuevamente un `unordered_map` para el mappeo desde el caracter leído hacia el `Recurso`. Se sobrecarga el operador `operator>>` para el pop, a razón de dar legibilidad (podemos ejecutar: `map >> resource;`). Un detalle es que se elige procesar los recursos uno a uno a medida que el hilo principal los pida, con el objetivo de que los recursos se inserten en las colas apenas estén disponibles.
-    * **Diagrama de clase**:
-    // insertar diagrama
+
+| ![map](img/clases/map.png) |
+|:--:|
+| *Diagrama de clase **MapParser*** |
 
 ## Objetos activos
 
