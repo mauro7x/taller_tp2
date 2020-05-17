@@ -67,27 +67,26 @@ class Game {
 
         /** 
          * Descripcion: pone a correr a los threads.
-         * Parametros: cantidad de threads a iniciar, vector de threads pasado
-         * por referencia.
+         * Parametros: vector de threads pasado por referencia.
          * Retorno: -
         */
-        void _startThreads(const int &n, std::vector<Thread*>& threads);
+        void _startThreads(std::vector<Thread*>& threads);
 
 
         /** 
          * Descripcion: espera la finalización de los threads.
-         * Parametros: cantidad de threads, vector de threads por referencia.
+         * Parametros: vector de threads por referencia.
          * Retorno: -
         */
-        void _joinThreads(const int &n, std::vector<Thread*>& threads);
+        void _joinThreads(std::vector<Thread*>& threads);
 
 
         /** 
          * Descripcion: libera la memoria dinámica reservada para los threads.
-         * Parametros: cantidad de threads, vector de threads por referencia.
+         * Parametros: vector de threads por referencia.
          * Retorno: -
         */
-        void _freeThreads(const int &n, std::vector<Thread*>& threads);
+        void _freeThreads(std::vector<Thread*>& threads);
 
 
         /** 

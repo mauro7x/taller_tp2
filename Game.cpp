@@ -65,7 +65,8 @@ void Game::_spawnWorkers() {
 }
 
 
-void Game::_startThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_startThreads(std::vector<Thread*>& threads) {
+    int n = threads.size();
     for (int i = 0; i < n; i++) {
         if (threads[i] == NULL) {
             throw(Exception(UNEXPECTED_NULL, "Error: nulo inesperado. "
@@ -76,7 +77,8 @@ void Game::_startThreads(const int &n, std::vector<Thread*>& threads) {
 }
 
 
-void Game::_joinThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_joinThreads(std::vector<Thread*>& threads) {
+    int n = threads.size();
     for (int i = 0; i < n; i++) {
         if (threads[i] != NULL) {
             threads[i]->join();
@@ -85,7 +87,8 @@ void Game::_joinThreads(const int &n, std::vector<Thread*>& threads) {
 }
 
 
-void Game::_freeThreads(const int &n, std::vector<Thread*>& threads) {
+void Game::_freeThreads(std::vector<Thread*>& threads) {
+    int n = threads.size();
     for (int i = 0; i < n; i++) {
         if (threads[i] != NULL) {
             delete threads[i];
@@ -148,9 +151,9 @@ void Game::_printResults() {
 
 void Game::_forceFinish() {
     _closeResourceQueues();
-    _joinThreads(total_gatherers, gatherers);
+    _joinThreads(gatherers);
     inventory.close();
-    _joinThreads(total_producers, producers);
+    _joinThreads(producers);
 }
 
 
@@ -174,21 +177,21 @@ void Game::run() { // main thread
     try {
         // Spawneamos a los workers y los ponemos a correr
         _spawnWorkers();
-        _startThreads(total_gatherers, gatherers);
-        _startThreads(total_producers, producers);
+        _startThreads(gatherers);
+        _startThreads(producers);
 
         // Repartimos los recursos y luego cerramos las fuentes
         _distributeResources();
         _closeResourceQueues();
 
         // Esperamos que terminen los recolectores
-        _joinThreads(total_gatherers, gatherers);
+        _joinThreads(gatherers);
 
         // Cerramos el inventario para que terminen los productores
         inventory.close();
 
         // Esperamos que terminen los productores y salimos
-        _joinThreads(total_producers, producers);
+        _joinThreads(producers);
     } catch(const Exception& e) {
         _forceFinish();
         throw e;
@@ -199,8 +202,8 @@ void Game::run() { // main thread
 
 
 Game::~Game() {
-    _freeThreads(total_gatherers, gatherers);
-    _freeThreads(total_producers, producers);
+    _freeThreads(gatherers);
+    _freeThreads(producers);
 }
 
 //-----------------------------------------------------------------------------
