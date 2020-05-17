@@ -33,13 +33,13 @@ class Gatherer : public Thread {
          * Parametros: -
          * Retorno: -
         */
-        virtual void run() override;
+        void run() override;
 
 
         /** 
          * Descripcion: destructor.
         */
-        virtual ~Gatherer();
+        ~Gatherer();
 };
 
 //-----------------------------------------------------------------------------

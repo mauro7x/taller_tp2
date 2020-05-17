@@ -38,13 +38,13 @@ class Producer : public Thread {
          * Parametros: -
          * Retorno: -
         */
-        virtual void run() override;
+        void run() override;
         
         
         /** 
          * Descripcion: destructor.
         */
-        virtual ~Producer();
+        ~Producer();
 };
 
 //-----------------------------------------------------------------------------
